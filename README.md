@@ -1,1 +1,2 @@
 # Banking-Expense-Planner-App
+VisionWallet is a smart personal finance management app that helps users take full control of their money. From tracking income and expenses to setting savings goals, managing monthly budgets, and receiving bill reminders — VisionWallet offers an all-in-one dashboard for secure, intuitive, and goal-driven money management. Whether you're a student or a professional, VisionWallet simplifies your financial journey with real-time insights and organized tools to make better financial decisions.
