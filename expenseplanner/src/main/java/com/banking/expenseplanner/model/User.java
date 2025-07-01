@@ -24,7 +24,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private Double balance = 10000.0;  // Default balance
+    private Double balance = 0.0;  // Default balance
 
 
-}	
+}

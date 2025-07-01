@@ -3,18 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <title>Banking Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .section { display: none; }
-    </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    padding-top: 80px; /* 👈 ensures all content clears the navbar */
+    height: 100vh;
+    background: linear-gradient(to right, #2b1055, #7597de);
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    overflow-x: hidden;
+  }
+
+
+	.navbar {
+	  top: 0;
+	  width: 100%;
+	  z-index: 1000;
+	  background-color: rgba(255, 255, 255, 0.1) !important;
+	  backdrop-filter: blur(10px);
+	  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+	}
+
+
+  .navbar-brand img {
+    height: 60px;
+  }
+
+	.logo img {
+	  height: 60px;
+	}
+
+	.rounded-logo {
+	  border-radius: 1rem;
+	  object-fit: cover;
+	  height: 60px;
+	  width: auto;  /* ✅ to maintain aspect ratio */
+	}
+
+
+
+  h2, h4, h5 {
+    font-weight: 700;
+    color: white;
+  }
+
+  .card {
+    border-radius: 16px;
+    padding: 15px;
+    color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+
+	/* Add emojis to card headings */
+	.card-body h5::before {
+	  margin-right: 8px;
+	  font-size: 1.2em;
+	}
+
+	.card.text-bg-success h5::before {
+	  content: "💰"; /* Total Balance */
+	}
+
+	.card.text-bg-primary h5::before {
+	  content: "📈"; /* Total Income */
+	}
+
+	.card.text-bg-danger h5::before {
+	  content: "📉"; /* Total Expense */
+	}
+
+	/* Make amount font larger and bolder */
+	.card-body p {
+	  font-size: 1.6rem;
+	  font-weight: bold;
+	  margin-top: 8px;
+	}
+
+
+
+  .text-bg-success {
+    background-color: #28a745 !important;
+  }
+
+  .text-bg-primary {
+    background-color: #007bff !important;
+  }
+
+  .text-bg-danger {
+    background-color: #dc3545 !important;
+  }
+
+  .btn {
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-weight: 600;
+  }
+
+  .btn-outline-dark {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+  }
+
+  .btn-outline-dark:hover {
+    background-color: white;
+    color: #333;
+  }
+
+  .btn-danger {
+    background-color: #e74c3c;
+    border: none;
+    font-weight: bold;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+    border: none;
+    font-weight: bold;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+    font-weight: bold;
+  }
+
+  .btn-warning {
+    background-color: #ffc107;
+    border: none;
+    font-weight: bold;
+    color: #000;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    font-weight: bold;
+  }
+
+  .form-control {
+    border-radius: 12px;
+    padding: 12px 15px;
+    font-size: 15px;
+    border: none;
+  }
+
+  .table {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .table thead {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+  }
+
+  .table tbody tr td {
+    vertical-align: middle;
+  }
+
+  .section {
+    display: none;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    margin-bottom: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  #transactionTable td.amount-income {
+    color: #00ff91;
+    font-weight: bold;
+  }
+
+  #transactionTable td.amount-expense {
+    color: #ff5757;
+    font-weight: bold;
+  }
+
+  .form-check-label {
+    color: white;
+  }
+
+  .form-check-input:checked {
+    background-color: #ffc107;
+    border-color: #ffc107;
+  }
+
+  /* Scrollbar styling (optional) */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+</style>
+
 </head>
 <body>
 <!-- Sticky Header with Logo -->
-<nav class="navbar navbar-light bg-light sticky-top shadow-sm px-3">
-    <a class="navbar-brand d-flex align-items-center" href="#">
-        <img src="/images/VisionWallet.png" alt="VisionWallet Logo" height="40" class="me-2">
-    </a>
+<nav class="navbar navbar-light bg-light fixed-top shadow-sm px-3 d-flex justify-content-between align-items-center">
+  <div class="logo">
+    <img src="/images/VisionWallet.png" alt="VisionWallet Logo" height="60" class="rounded-logo">
+  </div>
+
+  <button class="btn btn-danger" onclick="logout()">Logout</button>
 </nav>
+
 
 
 <div class="container mt-5">
@@ -53,9 +269,9 @@
         <button class="btn btn-outline-dark me-2" onclick="showSection('addTx')">➕ Add Transaction</button>
         <button class="btn btn-outline-dark me-2" onclick="showSection('txTable')">📜 View Transactions</button>
         <button class="btn btn-outline-dark me-2" onclick="showSection('reminder')">🔔 Reminders</button>
-        <button class="btn btn-outline-dark me-2" onclick="showSection('budget')">💰 Budget</button>
+        <button class="btn btn-outline-dark me-2" onclick="showSection('budget')">📆 Budget</button>
         <button class="btn btn-outline-dark me-2" onclick="showSection('savings')">🎯 Savings Goals</button>
-        <button class="btn btn-danger float-end" onclick="logout()">Logout</button>
+
     </div>
 
     <!-- 📥 Transaction Form -->
@@ -73,7 +289,7 @@
 	            </div>
 	            <div class="col-md-2 mb-2">
 	                <label>Amount (₹)</label>
-	                <input type="number" class="form-control" id="amount" required step="0.01">
+	                <input type="number" min="0.1" class="form-control" id="amount" required step="0.01">
 	            </div>
 	            <div class="col-md-2 mb-2">
 	                <label>Date</label>
@@ -115,7 +331,7 @@
         <h4>Transaction History</h4>
         <table class="table">
 
-            <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Type</th></tr></thead>
+<thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th></tr></thead>
             <tbody id="transactionTable"></tbody>
         </table>
     </div>
@@ -141,7 +357,7 @@
     <div class="row">
         <div class="col-md-4 mb-2">
             <label>Amount</label>
-            <input type="number" class="form-control" id="reminderAmount" required step="0.01">
+            <input type="number" min="0.1" class="form-control" id="reminderAmount" required step="0.01">
         </div>
         <div class="col-md-4 mb-2">
             <div class="form-check mt-4">
@@ -152,8 +368,6 @@
     </div>
     <button type="submit" class="btn btn-warning" id="reminderSubmitBtn">Add Reminder</button>
 </form>
-
-
 	    <hr class="my-4">
 	    <h5>📅 Upcoming Reminders (Next 7 Days)</h5>
 	    <table class="table table-striped">
@@ -186,7 +400,7 @@
 	            </div>
 	            <div class="col-md-3 mb-2">
 	                <label>Limit Amount</label>
-	                <input type="number" class="form-control" id="budgetAmount" required step="0.01">
+	                <input type="number" min="0" class="form-control" id="budgetAmount" required step="0.01">
 	            </div>
 	            <div class="col-md-3 mb-2">
 	                <label>Month</label>
@@ -208,7 +422,7 @@
 	            </div>
 	            <div class="col-md-3 mb-2">
 	                <label>Year</label>
-	                <input type="number" class="form-control" id="budgetYear" required value="2025">
+	                <input type="number" min="0" class="form-control" id="budgetYear" required value="2025">
 	            </div>
 	        </div>
 	        <button type="submit" class="btn btn-primary">➕ Add Budget</button>
@@ -238,7 +452,7 @@
 		  </div>
 		  <div class="col-md-3">
 		    <label>Year</label>
-		    <input type="number" id="budgetFilterYear" class="form-control" placeholder="e.g. 2025">
+		    <input type="number" min="0" id="budgetFilterYear" class="form-control" placeholder="e.g. 2025">
 		  </div>
 		  <div class="col-md-3 d-flex align-items-end">
 		    <button class="btn btn-primary me-2" onclick="applyBudgetFilter()">🔍 Filter</button>
@@ -261,6 +475,14 @@
 	        </tbody>
 	    </table>
 	</div>
+	<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+	  <div id="budgetToast" class="toast text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+	    <div class="d-flex">
+	      <div class="toast-body">Budget action successful</div>
+	      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+	    </div>
+	  </div>
+	</div>
 
 
 	<!-- 🎯 Savings Goals -->
@@ -278,7 +500,7 @@
 				</div>
 	            <div class="col-md-4 mb-2">
 	                <label>Target Amount</label>
-	                <input type="number" class="form-control" id="targetAmount" required step="0.01">
+	                <input type="number" min="0.1" class="form-control" id="targetAmount" required step="0.01">
 	            </div>
 	        </div>
 	        <button type="submit" class="btn btn-success">➕ Add Goal</button>
@@ -302,8 +524,40 @@
 	        </tbody>
 	    </table>
 	</div>
+		<!-- ✅ Goal Add Toast Message -->
+	<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+	  <div id="goalAddToast" class="toast text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+	    <div class="d-flex">
+	      <div class="toast-body">Goal added successfully!</div>
+	      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- ✅ Withdrawal Toast Message -->
+	<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+	  <div id="goalToast" class="toast text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+	    <div class="d-flex">
+	      <div class="toast-body">Withdrawn successfully!</div>
+	      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- ✅ Transaction Toast Message -->
+	<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+	  <div id="txToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+	    <div class="d-flex">
+	      <div class="toast-body">
+	        ✅ Transaction added successfully!
+	      </div>
+	      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+	    </div>
+	  </div>
+	</div>
 
 </div>
+<div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1100;"></div>
 
 <!-- JS Section -->
 <script>
@@ -348,16 +602,24 @@
 	    data.sort((a, b) => new Date(b.date) - new Date(a.date)); // Most recent first
 
 	    data.forEach(tx => {
+	        const isExpense = tx.type === "EXPENSE";
+	        const sign = isExpense ? "-" : "+";
+	        const colorClass = isExpense ? "text-danger" : "text-success";
+	        const formattedAmount = tx.amount.toLocaleString("en-IN", {
+	            minimumFractionDigits: 2,
+	            maximumFractionDigits: 2
+	        });
+
 	        const row = `<tr>
 	            <td>${tx.date}</td>
 	            <td>${tx.category}</td>
 	            <td>${tx.description}</td>
-	            <td>₹${tx.amount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-</td>
-	            <td>${tx.type}</td>
+	            <td class="${colorClass} fw-bold">${sign} ₹${formattedAmount}</td>
 	        </tr>`;
 	        table.innerHTML += row;
 	    });
+
+
 	}
 
 	async function filterTransactions() {
@@ -366,9 +628,15 @@
 	    const end = document.getElementById("txEndDate").value;
 
 	    if (!start || !end) {
-	        alert("Please select both start and end dates.");
-	        return;
-	    }
+	    	  Swal.fire({
+	    	    icon: 'warning',
+	    	    title: 'Missing Dates',
+	    	    text: 'Please select both start and end dates.',
+	    	    confirmButtonColor: '#ffc107'
+	    	  });
+	    	  return;
+	    	}
+
 
 	    const res = await fetch(`/api/expenses/filter?start=${start}&end=${end}`, {
 	        headers: { Authorization: "Bearer " + token }
@@ -381,16 +649,23 @@
 	    data.sort((a, b) => new Date(b.date) - new Date(a.date)); // Optional but recommended
 
 	    data.forEach(tx => {
+	        const isExpense = tx.type === "EXPENSE";
+	        const sign = isExpense ? "-" : "+";
+	        const colorClass = isExpense ? "text-danger" : "text-success";
+	        const formattedAmount = tx.amount.toLocaleString("en-IN", {
+	            minimumFractionDigits: 2,
+	            maximumFractionDigits: 2
+	        });
+
 	        const row = `<tr>
 	            <td>${tx.date}</td>
 	            <td>${tx.category}</td>
 	            <td>${tx.description}</td>
-	            <td>₹${tx.amount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-</td>
-	            <td>${tx.type}</td>
+	            <td class="${colorClass} fw-bold">${sign} ₹${formattedAmount}</td>
 	        </tr>`;
 	        table.innerHTML += row;
 	    });
+
 	}
 
 	async function resetTransactionFilter() {
@@ -403,41 +678,66 @@
 
 
 //Add Transactions
-    document.getElementById("expenseForm").addEventListener("submit", async function (event) {
-        event.preventDefault();
+document.getElementById("expenseForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-        const token = localStorage.getItem("jwt");
-        const transaction = {
-            category: document.getElementById("category").value,
-            description: document.getElementById("description").value,
-            amount: parseFloat(document.getElementById("amount").value),
-            date: document.getElementById("date").value,
-            type: document.getElementById("type").value
-        };
+    const amount = parseFloat(document.getElementById("amount").value);
+    if (isNaN(amount) || amount < 0) {
+        alert("Amount cannot be negative.");
+        return;
+    }
 
-        const response = await fetch("/api/expenses/add", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-            },
-            body: JSON.stringify(transaction)
-        });
+    const token = localStorage.getItem("jwt");
+    const transaction = {
+        category: document.getElementById("category").value,
+        description: document.getElementById("description").value,
+        amount: amount,
+        date: document.getElementById("date").value,
+        type: document.getElementById("type").value
+    };
 
-        const result = await response.text();
-        alert(result);
-
-        if (response.ok) {
-            loadSummary();     // refresh balance/income/expense
-            loadTransactions(); // refresh history
-            document.getElementById("expenseForm").reset();
-        }
+    const response = await fetch("/api/expenses/add", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(transaction)
     });
+
+    const result = await response.text();
+
+    if (response.ok) {
+        // ✅ Show success toast
+        const toastElement = document.getElementById('txToast');
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+
+        loadSummary();     // refresh balance/income/expense
+        loadTransactions(); // refresh history
+        document.getElementById("expenseForm").reset();
+    }else {
+    	  Swal.fire({
+    		    icon: 'error',
+    		    title: 'Transaction Failed',
+    		    text: result || 'Something went wrong!',
+    		    confirmButtonColor: '#dc3545'
+    		  });
+    		}
+
+});
+
 
 
  // Handle reminder form submit
 	document.getElementById("reminderForm").addEventListener("submit", async function (event) {
 	    event.preventDefault();
+
+	    const amount = parseFloat(document.getElementById("reminderAmount").value);
+	    if (isNaN(amount) || amount < 0) {
+	        alert("Amount cannot be negative.");
+	        return;
+	    }
 
 	    const token = localStorage.getItem("jwt");
 	    const reminder = {
@@ -445,7 +745,7 @@
 	        note: document.getElementById("reminderNote").value,
 	        dueDate: document.getElementById("reminderDate").value,
 	        recurring: document.getElementById("reminderRecurring").checked,
-	        amount: parseFloat(document.getElementById("reminderAmount").value)
+	        amount: amount
 	    };
 
 	    const url = editingReminderId ? `/api/reminders/${editingReminderId}` : "/api/reminders/add";
@@ -461,15 +761,31 @@
 	    });
 
 	    const result = await response.text();
-	    alert(result);
+	    Swal.fire({
+	    	  toast: true,
+	    	  position: 'top-end',
+	    	  icon: 'success',
+	    	  title: result,
+	    	  showConfirmButton: false,
+	    	  timer: 2500,
+	    	  timerProgressBar: true
+	    	});
+
 
 	    editingReminderId = null;
 	    document.getElementById("reminderForm").reset();
 	    document.querySelector("#reminderForm button[type='submit']").textContent = "Add Reminder";
-	    document.getElementById("reminderSubmitBtn").textContent = editingReminderId ? "🔄 Update Reminder" : "Add Reminder";
+	    document.getElementById("reminderSubmitBtn").textContent = "Add Reminder";
+
+	    //It will Reset Button To its original form
+	    const submitBtn = document.querySelector("#reminderForm button[type='submit']");
+	    submitBtn.textContent = "Add Reminder";
+	    submitBtn.classList.remove("btn-info");
+	    submitBtn.classList.add("btn-warning");
 
 	    loadReminders(); // reload reminder table
 	});
+
 
 
     // Load upcoming reminders: reminder’s due date today or within the next 7 days
@@ -514,35 +830,132 @@
 	        table.appendChild(row);
 	    });
 	}
+ //Show Reminder Toast
+	async function showReminderToasts() {
+	  const token = localStorage.getItem("jwt");
+	  const today = new Date().toISOString().split("T")[0];
 
-
- //payReminder()
-	async function payReminder(id) {
-	    const token = localStorage.getItem("jwt");
-	    const res = await fetch(`/api/reminders/pay/${id}`, {
-	        method: "PUT",
-	        headers: { Authorization: "Bearer " + token }
+	  try {
+	    const res = await fetch("/api/reminders/upcoming", {
+	      headers: {
+	        Authorization: "Bearer " + token
+	      }
 	    });
-	    alert(await res.text());
-	    loadSummary();
-	    loadTransactions();
-	    loadReminders();
+
+	    const reminders = await res.json();
+	    const container = document.getElementById("toastContainer");
+
+	    reminders.forEach(rem => {
+	      if (rem.dueDate <= today) {
+	        const toastEl = document.createElement("div");
+	        toastEl.className = "toast align-items-center text-bg-danger border-0 mb-2";
+	        toastEl.setAttribute("role", "alert");
+	        toastEl.setAttribute("aria-live", "assertive");
+	        toastEl.setAttribute("aria-atomic", "true");
+	        toastEl.innerHTML = `
+	          <div class="d-flex">
+	            <div class="toast-body">
+	              🔔 <strong>${rem.title}</strong><br>
+	              ${rem.note || "You have a pending reminder due today!"}
+	            </div>
+	            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+	          </div>
+	        `;
+
+	        container.appendChild(toastEl);
+
+	        const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+	        toast.show();
+	      }
+	    });
+	  } catch (error) {
+	    console.error("Error showing reminders:", error);
+	  }
 	}
+
+
+
+
+	//payReminder()
+	async function payReminder(id) {
+	  const token = localStorage.getItem("jwt");
+
+	  // SweetAlert2 Confirmation
+	  const result = await Swal.fire({
+	    title: "Pay Reminder?",
+	    text: "Are you sure you want to mark this reminder as paid?",
+	    icon: "question",
+	    showCancelButton: true,
+	    confirmButtonText: "Yes, Pay Now 💸",
+	    cancelButtonText: "Cancel"
+	  });
+
+	  if (!result.isConfirmed) return;
+
+	  // Proceed with payment
+	  const res = await fetch(`/api/reminders/pay/${id}`, {
+	    method: "PUT",
+	    headers: { Authorization: "Bearer " + token }
+	  });
+
+	  const message = await res.text();
+
+	  // ✅ Show success toast after payment
+	  Swal.fire({
+	    toast: true,
+	    position: 'top-end',
+	    icon: 'success',
+	    title: message || 'Reminder Paid!',
+	    showConfirmButton: false,
+	    timer: 2500,
+	    timerProgressBar: true
+	  });
+
+	  loadSummary();
+	  loadTransactions();
+	  loadReminders();
+	}
+
+
 
 	async function deleteReminder(id) {
-	    const token = localStorage.getItem("jwt");
-	    const confirmed = confirm("Delete this reminder?");
-	    if (!confirmed) return;
-	    const res = await fetch(`/api/reminders/delete/${id}`, {
-	        method: "DELETE",
-	        headers: { Authorization: "Bearer " + token }
-	    });
-	    alert(await res.text());
-	    loadReminders();
-	}
+		  const token = localStorage.getItem("jwt");
+
+		  const result = await Swal.fire({
+		    title: "Are you sure?",
+		    text: "This reminder will be deleted permanently!",
+		    icon: "warning",
+		    showCancelButton: true,
+		    confirmButtonColor: "#d33",
+		    cancelButtonColor: "#3085d6",
+		    confirmButtonText: "Yes, delete it!",
+		    cancelButtonText: "Cancel"
+		  });
+
+		  if (result.isConfirmed) {
+		    const res = await fetch(`/api/reminders/delete/${id}`, {
+		      method: "DELETE",
+		      headers: { Authorization: "Bearer " + token }
+		    });
+
+		    const msg = await res.text();
+
+		    Swal.fire({
+		      icon: "success",
+		      title: "Deleted!",
+		      text: msg,
+		      timer: 2000,
+		      showConfirmButton: false
+		    });
+
+		    loadReminders();
+		  }
+		}
+
 
 	let editingReminderId = null;
 	function editReminder(rem) {
+
 	    document.getElementById("reminderTitle").value = rem.title;
 	    document.getElementById("reminderNote").value = rem.note;
 	    document.getElementById("reminderDate").value = rem.dueDate;
@@ -550,7 +963,23 @@
 	    document.getElementById("reminderAmount").value = rem.amount;
 	    editingReminderId = rem.id;
 
-	    document.querySelector("#reminderForm button[type='submit']").textContent = "🔄 Update Reminder";
+	    const submitBtn = document.querySelector("#reminderForm button[type='submit']");
+	    submitBtn.textContent = "🔄 Update Reminder";
+	    submitBtn.classList.remove("btn-warning");
+	    submitBtn.classList.add("btn-info");
+
+	 // Show toast
+	    Swal.fire({
+	      toast: true,
+	      position: 'top-end',
+	      icon: 'info',
+	      title: 'Editing reminder...',
+	      showConfirmButton: false,
+	      timer: 2000,
+	      timerProgressBar: true,
+	      background: '#17a2b8',
+	      color: '#fff'
+	    });
 	}
 
 
@@ -601,8 +1030,8 @@
                 <td>${getMonthName(item.month)}</td>
                 <td>${item.year}</td>
                 <td>
-                    <button class="btn btn-sm btn-warning" onclick='editBudget(${JSON.stringify(item)})'>✏️</button>
-                    <button class="btn btn-sm btn-danger" onclick='deleteBudget(${item.id})'>🗑️</button>
+                    <button class="btn btn-sm btn-warning" onclick='editBudget(${JSON.stringify(item)})'>Edit</button>
+                    <button class="btn btn-sm btn-danger" onclick='deleteBudget(${item.id})'>Delete</button>
                 </td>
             `;
             table.appendChild(row);
@@ -628,54 +1057,103 @@
 	let editingBudgetId = null;
 
 	document.getElementById("budgetForm").addEventListener("submit", async function (event) {
-	    event.preventDefault();
+	  event.preventDefault();
 
-	    const token = localStorage.getItem("jwt");
-	    const category = document.getElementById("budgetCategory").value;
-	    const limitAmount = parseFloat(document.getElementById("budgetAmount").value);
-	    const month = parseInt(document.getElementById("budgetMonth").value);
-	    const year = parseInt(document.getElementById("budgetYear").value);
+	  const token = localStorage.getItem("jwt");
+	  const category = document.getElementById("budgetCategory").value;
+	  const limitAmount = parseFloat(document.getElementById("budgetAmount").value);
 
-	    const payload = { category, limitAmount, month, year };
-
-	    const url = editingBudgetId ? `/api/budget/${editingBudgetId}` : "/api/budget/add";
-	    const method = editingBudgetId ? "PUT" : "POST";
-
-	    const res = await fetch(url, {
-	        method,
-	        headers: {
-	            "Content-Type": "application/json",
-	            "Authorization": "Bearer " + token
-	        },
-	        body: JSON.stringify(payload)
+	  if (isNaN(limitAmount) || limitAmount < 0) {
+	    // Optional: SweetAlert for better UX
+	    Swal.fire({
+	      icon: "error",
+	      title: "Invalid Amount",
+	      text: "Budget limit cannot be negative.",
 	    });
+	    return;
+	  }
 
-	    const msg = await res.text();
-	    alert(msg);
+	  const month = parseInt(document.getElementById("budgetMonth").value);
+	  const year = parseInt(document.getElementById("budgetYear").value);
+	  const payload = { category, limitAmount, month, year };
 
-	    editingBudgetId = null;
-	    document.getElementById("budgetForm").reset();
-	    document.querySelector("#budgetForm button[type='submit']").textContent = "➕ Add Budget";
+	  const url = editingBudgetId ? `/api/budget/${editingBudgetId}` : "/api/budget/add";
+	  const method = editingBudgetId ? "PUT" : "POST";
 
+	  const res = await fetch(url, {
+	    method,
+	    headers: {
+	      "Content-Type": "application/json",
+	      "Authorization": "Bearer " + token
+	    },
+	    body: JSON.stringify(payload)
+	  });
 
-	    loadBudgets();
+	  const msg = await res.text();
+
+	  if (res.ok) {
+	    // Show success toast
+	    const toastElement = document.getElementById("budgetToast");
+	    toastElement.querySelector(".toast-body").textContent =
+	      editingBudgetId ? "Budget updated successfully! ✅" : "Budget added successfully!";
+
+	    const toast = new bootstrap.Toast(toastElement);
+	    toast.show();
+	  } else {
+	    // Show error alert
+	    Swal.fire({
+	      icon: "error",
+	      title: "Error",
+	      text: msg,
+	    });
+	  }
+
+	  editingBudgetId = null;
+	  document.getElementById("budgetForm").reset();
+	  document.querySelector("#budgetForm button[type='submit']").textContent = "➕ Add Budget";
+
+	  loadBudgets();
 	});
 
 
 	// 🧹 Delete budget
 	async function deleteBudget(id) {
-	    const token = localStorage.getItem("jwt");
-	    const confirmed = confirm("Are you sure you want to delete this budget?");
-	    if (!confirmed) return;
+	  const token = localStorage.getItem("jwt");
 
-	    const res = await fetch(`/api/budget/${id}`, {
-	        method: "DELETE",
-	        headers: { Authorization: "Bearer " + token }
-	    });
+	  // Show SweetAlert confirmation
+	  const result = await Swal.fire({
+	    title: 'Are you sure?',
+	    text: 'This budget will be permanently deleted.',
+	    icon: 'warning',
+	    showCancelButton: true,
+	    confirmButtonText: 'Yes, delete it!',
+	    cancelButtonText: 'Cancel',
+	    confirmButtonColor: '#d33',
+	    cancelButtonColor: '#3085d6'
+	  });
 
-	    alert(await res.text());
-	    loadBudgets();
+	  if (!result.isConfirmed) return;
+
+	  // Proceed with delete if confirmed
+	  const res = await fetch(`/api/budget/${id}`, {
+	    method: "DELETE",
+	    headers: { Authorization: "Bearer " + token }
+	  });
+
+	  const msg = await res.text();
+
+	  // Show SweetAlert success after deletion
+	  Swal.fire({
+	    icon: 'success',
+	    title: 'Deleted!',
+	    text: msg,
+	    timer: 2000,
+	    showConfirmButton: false
+	  });
+
+	  loadBudgets(); // Refresh the table
 	}
+
 
 	// ✏️ Edit budget
 	function editBudget(budget) {
@@ -701,14 +1179,24 @@
 
 
 
-	// Submit new goal
+	// Submit new goal with validation and toast
 	document.getElementById("savingsForm").addEventListener("submit", async function (event) {
 	    event.preventDefault();
+
+	    const targetAmount = parseFloat(document.getElementById("targetAmount").value);
+	    if (isNaN(targetAmount) || targetAmount < 0) {
+	        Swal.fire({
+	            icon: "warning",
+	            title: "Invalid Amount",
+	            text: "Target amount cannot be negative."
+	        });
+	        return;
+	    }
 
 	    const goal = {
 	        goalName: document.getElementById("goalName").value,
 	        description: document.getElementById("goalDescription").value,
-	        targetAmount: parseFloat(document.getElementById("targetAmount").value)
+	        targetAmount: targetAmount
 	    };
 
 	    const token = localStorage.getItem("jwt");
@@ -723,13 +1211,25 @@
 	    });
 
 	    const msg = await res.text();
-	    alert(msg);
 
 	    if (res.ok) {
 	        document.getElementById("savingsForm").reset();
 	        loadSavingsGoals();
+
+	        // ✅ Show success toast
+	        const toastEl = document.getElementById("goalAddToast");
+	        toastEl.querySelector(".toast-body").textContent = msg;
+	        const toast = new bootstrap.Toast(toastEl);
+	        toast.show();
+	    } else {
+	        Swal.fire({
+	            icon: "error",
+	            title: "Failed",
+	            text: msg
+	        });
 	    }
 	});
+
 
 	//Load goals and render table
 	async function loadSavingsGoals() {
@@ -770,7 +1270,7 @@
 	        } else {
 	            actions = `
 	                <button class="btn btn-sm btn-success" onclick="updateProgress(${goal.id})">💰 Add</button>
-	                <button class="btn btn-sm btn-danger ms-1" onclick="withdrawFromGoal(${goal.id})">↩️ Withdraw</button>
+	                <button class="btn btn-sm btn-primary ms-1" onclick="withdrawFromGoal(${goal.id})">↩️ Withdraw</button>
 	                <button class="btn btn-sm btn-danger ms-1" onclick="deleteGoal(${goal.id})">🗑️ Delete</button>
 	            `;
 	        }
@@ -790,114 +1290,269 @@
 	}
 
 
-	//Withdraw Money From Goal
+	// Withdraw Money From Goal (SweetAlert2 only)
 	async function withdrawFromGoal(goalId) {
-	    const amount = prompt("Enter amount to withdraw:");
-	    if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-	        alert("Invalid amount");
-	        return;
+	  const { value: amount } = await Swal.fire({
+	    title: "Withdraw Amount",
+	    input: "number",
+	    inputLabel: "Enter amount to withdraw:",
+	    inputPlaceholder: "e.g. 500",
+	    inputAttributes: {
+	      min: 0.1,
+	      step: 0.01
+	    },
+	    showCancelButton: true,
+	    confirmButtonText: "Withdraw",
+	    cancelButtonText: "Cancel",
+	    inputValidator: (value) => {
+	      if (!value || isNaN(value) || parseFloat(value) <= 0) {
+	        return "Please enter a valid positive number.";
+	      }
 	    }
+	  });
 
-	    const token = localStorage.getItem("jwt");
+	  if (!amount) return; // user cancelled
 
+	  const token = localStorage.getItem("jwt");
+
+	  try {
 	    const res = await fetch(`/api/savings/withdraw/${goalId}?amount=${amount}`, {
-	        method: "PUT",
-	        headers: { Authorization: "Bearer " + token }
+	      method: "PUT",
+	      headers: { Authorization: "Bearer " + token }
 	    });
 
 	    const msg = await res.text();
-	    alert(msg);
-	    loadSavingsGoals();
-	    loadSummary(); // refresh balance
+
+	    if (!res.ok || msg.toLowerCase().includes("insufficient") || msg.toLowerCase().includes("exceed")) {
+	      // ❌ Handle backend failure message
+	      Swal.fire({
+	        icon: "error",
+	        title: "Withdrawal Failed",
+	        text: msg,
+	        confirmButtonColor: "#d33"
+	      });
+	    } else {
+	      // ✅ Success
+	      Swal.fire({
+	        icon: "success",
+	        title: "Withdrawal Successful",
+	        text: msg,
+	        timer: 2500,
+	        showConfirmButton: false
+	      });
+
+	      loadSavingsGoals();
+	      loadSummary();
+	    }
+	  } catch (error) {
+	    Swal.fire({
+	      icon: "error",
+	      title: "Error",
+	      text: "Something went wrong while processing your request."
+	    });
+	  }
 	}
 
 
-	// ✅ Update saved amount with validation and UI update
+
+
+	// ✅ Update saved amount using SweetAlert2
 	async function updateProgress(goalId) {
-	    const input = prompt("Enter amount to add to savings:");
-	    const amountToAdd = parseFloat(input);
-
-	    if (isNaN(amountToAdd) || amountToAdd <= 0) {
-	        alert("Please enter a valid positive number.");
-	        return;
+	  const { value: amountInput } = await Swal.fire({
+	    title: "Add to Savings",
+	    input: "number",
+	    inputLabel: "Enter amount to add to your savings goal:",
+	    inputPlaceholder: "e.g. 1000",
+	    inputAttributes: {
+	      min: 0.1,
+	      step: 0.01
+	    },
+	    showCancelButton: true,
+	    confirmButtonText: "Add",
+	    cancelButtonText: "Cancel",
+	    inputValidator: (value) => {
+	      if (!value || isNaN(value) || parseFloat(value) <= 0) {
+	        return "Please enter a valid positive number.";
+	      }
 	    }
+	  });
 
+	  if (amountInput) {
+	    const amountToAdd = parseFloat(amountInput);
 	    const token = localStorage.getItem("jwt");
 
 	    try {
-	        const res = await fetch(`/api/savings/update/${goalId}?amountToAdd=${amountToAdd}`, {
-	            method: "PUT",
-	            headers: {
-	                Authorization: "Bearer " + token
-	            }
-	        });
+	      const res = await fetch(`/api/savings/update/${goalId}?amountToAdd=${amountToAdd}`, {
+	        method: "PUT",
+	        headers: {
+	          Authorization: "Bearer " + token
+	        }
+	      });
 
-	        const msg = await res.text();
-	        alert(msg);
+	      const msg = await res.text();
 
-	        // ✅ Refresh banking summary + savings goal table
-	        loadSummary();
-	        loadSavingsGoals();
+	      Swal.fire({
+	        icon: "success",
+	        title: "Saved Successfully!",
+	        text: msg,
+	        timer: 2500,
+	        showConfirmButton: false
+	      });
+
+	      loadSummary();
+	      loadSavingsGoals();
 	    } catch (error) {
-	        console.error("Failed to update goal progress", error);
-	        alert("Something went wrong while updating the savings goal.");
+	      console.error("Failed to update goal progress", error);
+	      Swal.fire({
+	        icon: "error",
+	        title: "Error",
+	        text: "Something went wrong while updating the savings goal."
+	      });
 	    }
+	  }
 	}
 
-	//Delete The Goal
-	async function deleteGoal(id) {
-	    const confirmed = confirm("Are you sure you want to delete this savings goal? Its saved amount will be added back to your balance.");
-	    if (!confirmed) return;
 
+	// ❌ Delete The Goal with confirmation using SweetAlert2
+	async function deleteGoal(id) {
+	  const result = await Swal.fire({
+	    title: "Delete Savings Goal?",
+	    text: "Are you sure you want to delete this savings goal? Its saved amount will be added back to your balance.",
+	    icon: "warning",
+	    showCancelButton: true,
+	    confirmButtonColor: "#d33",
+	    cancelButtonColor: "#3085d6",
+	    confirmButtonText: "Yes, delete it!",
+	    cancelButtonText: "Cancel"
+	  });
+
+	  if (result.isConfirmed) {
 	    const token = localStorage.getItem("jwt");
+
 	    const res = await fetch(`/api/savings/delete/${id}`, {
-	        method: "DELETE",
-	        headers: {
-	            Authorization: "Bearer " + token
-	        }
+	      method: "DELETE",
+	      headers: {
+	        Authorization: "Bearer " + token
+	      }
 	    });
 
 	    const msg = await res.text();
-	    alert(msg);
+
+	    await Swal.fire({
+	      icon: "success",
+	      title: "Deleted!",
+	      text: msg,
+	      timer: 2500,
+	      showConfirmButton: false
+	    });
+
 	    loadSavingsGoals();
 	    loadSummary(); // 💰 Update balance
+	  }
 	}
 
-	//Buy Handler
+
+	// 🛍️ Buy Handler with SweetAlert2 Toast
 	async function buyGoal(goalId) {
-		  const token = localStorage.getItem("jwt");
-		  const res = await fetch(`/api/savings/buy/${goalId}`, {
-		    method: "PUT",
-		    headers: { Authorization: "Bearer " + token }
-		  });
+	  const token = localStorage.getItem("jwt");
 
-		  alert(await res.text());
-		  loadSavingsGoals();
-		  loadSummary();
-		  loadTransactions();
-		}
+	  const res = await fetch(`/api/savings/buy/${goalId}`, {
+	    method: "PUT",
+	    headers: { Authorization: "Bearer " + token }
+	  });
 
-	//Withdraw Handler
+	  const msg = await res.text();
+
+	  // ✅ Show SweetAlert2 Toast
+	  Swal.fire({
+	    toast: true,
+	    position: 'top-end',
+	    icon: 'success',
+	    title: msg,
+	    showConfirmButton: false,
+	    timer: 3000,
+	    timerProgressBar: true
+	  });
+
+	  loadSavingsGoals();
+	  loadSummary();
+	  loadTransactions();
+	}
+
+
+	//Withdraw Handler with confirmation and toast
 	async function withdrawGoal(goalId) {
 	  const token = localStorage.getItem("jwt");
+
+	  // Optional: SweetAlert confirmation
+	  const result = await Swal.fire({
+	    title: "Are you sure?",
+	    text: "Withdraw saved amount from this goal?",
+	    icon: "warning",
+	    showCancelButton: true,
+	    confirmButtonColor: "#dc3545",
+	    cancelButtonColor: "#6c757d",
+	    confirmButtonText: "Yes, withdraw"
+	  });
+
+	  if (!result.isConfirmed) return;
+
 	  const res = await fetch(`/api/savings/withdraw/${goalId}`, {
 	    method: "DELETE",
 	    headers: { Authorization: "Bearer " + token }
 	  });
 
-	  alert(await res.text());
+	  const msg = await res.text();
+
+	  // ✅ Show toast
+	  const toastElement = document.getElementById("goalToast");
+	  toastElement.querySelector(".toast-body").textContent = msg;
+	  const toast = new bootstrap.Toast(toastElement);
+	  toast.show();
+
 	  loadSavingsGoals();
 	  loadSummary();
 	}
 
 
 
-    function logout() {
-        localStorage.removeItem("jwt");
-        window.location.href = "/";
-    }
+
+	function logout() {
+		  Swal.fire({
+		    title: 'Are you sure?',
+		    text: "You will be logged out of VisionWallet.",
+		    icon: 'warning',
+		    showCancelButton: true,
+		    confirmButtonColor: '#d33',
+		    cancelButtonColor: '#3085d6',
+		    confirmButtonText: 'Yes, logout',
+		    cancelButtonText: 'Cancel'
+		  }).then((result) => {
+		    if (result.isConfirmed) {
+		      localStorage.removeItem("jwt");
+		      window.location.href = "/";
+		    }
+		  });
+		}
+
 
     loadSummary(); // Load summary on page load
+
+ // Show "View Transactions" section by default on load
+	document.addEventListener("DOMContentLoaded", function () {
+	  // ✅ Show Transactions section by default
+	  showSection("txTable");
+
+	  // ✅ Check if reminders should be shown
+	  const shouldShowReminders = localStorage.getItem("showReminders");
+	  if (shouldShowReminders === "true") {
+	    localStorage.removeItem("showReminders");
+	    showReminderToasts(); // ✅ show toast reminders once
+	  }
+	});
+
+
+
 </script>
 </body>
 </html>

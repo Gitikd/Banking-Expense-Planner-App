@@ -3,6 +3,8 @@ package com.banking.expenseplanner.controller;
 import com.banking.expenseplanner.dto.LoginDto;
 import com.banking.expenseplanner.dto.UserDto;
 import com.banking.expenseplanner.service.UserService;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -24,4 +26,5 @@ public class UserController {
     public String loginUser(@Valid @RequestBody LoginDto loginDto) {
         return userService.loginUser(loginDto);
     }
+
 }
