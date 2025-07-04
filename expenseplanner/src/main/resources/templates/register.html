@@ -5,58 +5,99 @@
   <title>Register - VisionWallet</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
+    :root {
+      --peach: #FFF2E0;
+      --lavender-light: #C0C9EE;
+      --lavender: #A2AADB;
+      --lavender-dark: #898AC4;
+    }
+
     body {
       margin: 0;
       padding: 0;
       height: 100vh;
-      background: url('/images/Background.png') no-repeat center center fixed;
-      background-size: cover;
+      background: linear-gradient(135deg, #FFF2E0 0%, #C0C9EE 40%, #A2AADB 75%, #898AC4 100%);
       font-family: 'Segoe UI', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
+      overflow: hidden;
     }
 
-    .logo {
+    body::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/soft-wallpaper.png');
+      opacity: 0.06;
+      pointer-events: none;
+    }
+
+    .fixed-logo {
       position: absolute;
       top: 20px;
-      left: 20px;
+      left: 30px;
+      z-index: 10;
     }
 
-    .rounded-logo {
-      height: 60px;
-      width: 100%;
-      object-fit: cover;
-      border-radius: 1rem;
+    .big-logo {
+      height: 100px;
+      width: auto;
+      border-radius: 20px;
     }
 
     .login-card {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: white;
-      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(18px);
+      color: #333;
+      border-radius: 20px;
       padding: 40px 30px;
+      max-width: 420px;
       width: 100%;
-      max-width: 400px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.4);
 
-    .login-card h2 {
-      text-align: center;
-      font-weight: 700;
-      font-size: 28px;
     }
 
     .emoji-lock {
-      font-size: 36px;
       text-align: center;
       margin-bottom: 10px;
+    }
+
+    .fa-solid.fa-user-plus {
+      font-size: 42px;
+      color: var(--lavender);
+    }
+
+	  h2 {
+	    text-align: center;
+	    font-weight: 800;
+	    font-size: 28px;
+	    color: var(--lavender-dark);
+	    margin-bottom: 20px;
+	  }
+
+    label {
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: #444;
     }
 
     .form-control {
       border-radius: 12px;
       padding: 12px 15px;
       font-size: 16px;
+      border: none;
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group-text {
+      background: #f0f0f0;
+      border: none;
+      color: #333;
     }
 
     .password-group {
@@ -64,78 +105,110 @@
       overflow: hidden;
     }
 
-    .password-group .form-control {
-      border: none;
-      border-radius: 0;
-      box-shadow: none;
-    }
-
     .password-group .input-group-text {
-      background: #fff;
+      background: var(--lavender-light);
       border: none;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      border-left: 1px solid #ccc;
+      padding: 0 12px;
+      color: #333;
     }
 
     .btn-register {
-      border-radius: 12px;
+      background: linear-gradient(135deg, #898AC4, #A2AADB);
+      border: none;
+      border-radius: 14px;
       font-size: 18px;
       padding: 12px;
-      margin-top: 15px;
+      margin-top: 20px;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s ease, background 0.3s ease;
     }
 
-    .form-text {
-      text-align: center;
-      margin-top: 12px;
-      color: white;
+    .btn-register:hover {
+      background: linear-gradient(135deg, #A2AADB, #898AC4);
+      transform: scale(1.02);
     }
 
-    .form-text a {
-      text-decoration: none;
-      color: #ffc107;
-    }
+		.form-text {
+		  text-align: center;
+		  margin-top: 16px;
+		  color: #444; /* darker text for better visibility */
+		  font-size: 15px;
+		}
+
+		.form-text a {
+		  color: #5e63c3; /* soft violet link */
+		  text-decoration: none;
+		  font-weight: 600;
+		}
+
+		.form-text a:hover {
+		  text-decoration: underline;
+		  color: #3d3fa0;
+		}
+
+
+	  .form-icon {
+	    margin-right: 8px;
+	    color: var(--lavender-light);
+	  }
+
+	  input:focus {
+	    outline: 2px solid var(--lavender);
+	    box-shadow: 0 0 0 0.15rem var(--lavender-light);
+	  }
   </style>
 </head>
 <body>
 
-<!-- Logo -->
-<div class="logo">
-  <img src="/images/VisionWallet.png" alt="VisionWallet Logo" height="60" class="rounded-logo">
+<!-- Logo at top-left -->
+<div class="fixed-logo">
+  <img src="/images/VisionWallet.png" alt="VisionWallet Logo" class="big-logo">
 </div>
 
 <!-- Register Card -->
-<div class="login-card" id="registerCard">  <!-- added id here -->
-  <div class="emoji-lock">📝</div>
+<div class="login-card" id="registerCard">
+  <div class="emoji-lock">
+    <i class="fa-solid fa-user-plus"></i>
+  </div>
   <h2>Register</h2>
 
-  <form id="registerForm" class="mt-4">
-    <div class="mb-3">
-      <label>Name</label>
-      <input type="text" id="regName" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label>Email</label>
-      <input type="email" id="regEmail" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label>Password</label>
-      <div class="input-group password-group">
-        <input type="password" id="regPassword" class="form-control" required>
-        <span class="input-group-text toggle-password" onclick="togglePassword()">
-          <i class="fa-solid fa-eye" id="eyeIcon"></i>
-        </span>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-success w-100 btn-register">Register</button>
-    <div class="form-text">
-      Already have an account? <a href="/login">Login</a>
-    </div>
-  </form>
+	<form id="registerForm" class="mt-4">
+	  <div class="mb-3">
+	    <label><i class="fas fa-user form-icon"></i> Name</label>
+	    <input type="text" id="regName" class="form-control" placeholder="Enter your full name" required>
+	  </div>
+
+	  <div class="mb-3">
+	    <label><i class="fas fa-envelope form-icon"></i> Email</label>
+	    <input type="email" id="regEmail" class="form-control" placeholder="Enter your email address" required>
+	  </div>
+
+	  <div class="mb-3">
+	    <label><i class="fas fa-lock form-icon"></i> Password</label>
+	    <div class="input-group password-group">
+	      <input type="password" id="regPassword" class="form-control" placeholder="Create a strong password" required>
+	      <span class="input-group-text toggle-password" onclick="togglePassword()">
+	        <i class="fa-solid fa-eye" id="eyeIcon"></i>
+	      </span>
+	    </div>
+	  </div>
+
+	  <button type="submit" class="btn btn-register w-100">
+	    <i class="fas fa-user-plus me-2"></i>Register
+	  </button>
+
+	  <div class="form-text">
+	    Already have an account? <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+	  </div>
+	</form>
+
+
 </div>
 
-<!-- ✅ Success animation container -->
+<!-- Success Animation -->
 <div id="successAnimation" style="display: none; text-align: center;">
   <dotlottie-player
     src="https://lottie.host/58a13603-843a-4591-a9b7-552a9b597b62/vK5k1QRftF.lottie"
@@ -148,7 +221,7 @@
   <h5 class="text-success mt-3">Registration Successful! Redirecting...</h5>
 </div>
 
-
+<!-- Scripts -->
 <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 <script>
   function togglePassword() {
@@ -163,34 +236,32 @@
   }
 
   document.getElementById("registerForm").addEventListener("submit", async function (event) {
-	  event.preventDefault();
+    event.preventDefault();
 
-	  const name = document.getElementById("regName").value;
-	  const email = document.getElementById("regEmail").value;
-	  const password = document.getElementById("regPassword").value;
+    const name = document.getElementById("regName").value;
+    const email = document.getElementById("regEmail").value;
+    const password = document.getElementById("regPassword").value;
 
-	  const response = await fetch("/api/users/register", {
-	    method: "POST",
-	    headers: { "Content-Type": "application/json" },
-	    body: JSON.stringify({ name, email, password })
-	  });
+    const response = await fetch("/api/users/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password })
+    });
 
-	  const result = await response.text();
+    const result = await response.text();
 
-	  if (result.toLowerCase().includes("success")) {
-	    document.getElementById("registerCard").style.display = "none";
-	    document.getElementById("successAnimation").style.display = "block";
+    if (result.toLowerCase().includes("success")) {
+      document.getElementById("registerCard").style.display = "none";
+      document.getElementById("successAnimation").style.display = "block";
 
-	    setTimeout(() => {
-	      window.location.href = "/login";
-	    }, 2500);
-	  } else {
-	    alert("Registration failed: " + result);
-	  }
-	});
-
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2500);
+    } else {
+      alert("Registration failed: " + result);
+    }
+  });
 </script>
-
 
 </body>
 </html>

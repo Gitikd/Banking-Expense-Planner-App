@@ -1,1558 +1,499 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Banking Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+<meta charset="UTF-8">
+<title>Banking Dashboard</title>
 
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet">
 
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    padding-top: 80px; /* 👈 ensures all content clears the navbar */
-    height: 100vh;
-    background: linear-gradient(to right, #2b1055, #7597de);
-    font-family: 'Segoe UI', sans-serif;
-    color: white;
-    overflow-x: hidden;
-  }
+<!-- Font Awesome -->
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+	rel="stylesheet">
 
-
-	.navbar {
-	  top: 0;
-	  width: 100%;
-	  z-index: 1000;
-	  background-color: rgba(255, 255, 255, 0.1) !important;
-	  backdrop-filter: blur(10px);
-	  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-	}
-
-
-  .navbar-brand img {
-    height: 60px;
-  }
-
-	.logo img {
-	  height: 60px;
-	}
-
-	.rounded-logo {
-	  border-radius: 1rem;
-	  object-fit: cover;
-	  height: 60px;
-	  width: auto;  /* ✅ to maintain aspect ratio */
-	}
-
-
-
-  h2, h4, h5 {
-    font-weight: 700;
-    color: white;
-  }
-
-  .card {
-    border-radius: 16px;
-    padding: 15px;
-    color: white;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    text-align: center;
-  }
-
-	/* Add emojis to card headings */
-	.card-body h5::before {
-	  margin-right: 8px;
-	  font-size: 1.2em;
-	}
-
-	.card.text-bg-success h5::before {
-	  content: "💰"; /* Total Balance */
-	}
-
-	.card.text-bg-primary h5::before {
-	  content: "📈"; /* Total Income */
-	}
-
-	.card.text-bg-danger h5::before {
-	  content: "📉"; /* Total Expense */
-	}
-
-	/* Make amount font larger and bolder */
-	.card-body p {
-	  font-size: 1.6rem;
-	  font-weight: bold;
-	  margin-top: 8px;
-	}
-
-
-
-  .text-bg-success {
-    background-color: #28a745 !important;
-  }
-
-  .text-bg-primary {
-    background-color: #007bff !important;
-  }
-
-  .text-bg-danger {
-    background-color: #dc3545 !important;
-  }
-
-  .btn {
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-weight: 600;
-  }
-
-  .btn-outline-dark {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 2px solid white;
-  }
-
-  .btn-outline-dark:hover {
-    background-color: white;
-    color: #333;
-  }
-
-  .btn-danger {
-    background-color: #e74c3c;
-    border: none;
-    font-weight: bold;
-  }
-
-  .btn-success {
-    background-color: #28a745;
-    border: none;
-    font-weight: bold;
-  }
-
-  .btn-primary {
-    background-color: #007bff;
-    border: none;
-    font-weight: bold;
-  }
-
-  .btn-warning {
-    background-color: #ffc107;
-    border: none;
-    font-weight: bold;
-    color: #000;
-  }
-
-  .btn-secondary {
-    background-color: #6c757d;
-    border: none;
-    font-weight: bold;
-  }
-
-  .form-control {
-    border-radius: 12px;
-    padding: 12px 15px;
-    font-size: 15px;
-    border: none;
-  }
-
-  .table {
-    color: white;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .table thead {
-    background-color: rgba(255, 255, 255, 0.15);
-    color: white;
-  }
-
-  .table tbody tr td {
-    vertical-align: middle;
-  }
-
-  .section {
-    display: none;
-    padding: 20px;
-    border-radius: 12px;
-    background-color: rgba(255, 255, 255, 0.05);
-    margin-bottom: 40px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  }
-
-  #transactionTable td.amount-income {
-    color: #00ff91;
-    font-weight: bold;
-  }
-
-  #transactionTable td.amount-expense {
-    color: #ff5757;
-    font-weight: bold;
-  }
-
-  .form-check-label {
-    color: white;
-  }
-
-  .form-check-input:checked {
-    background-color: #ffc107;
-    border-color: #ffc107;
-  }
-
-  /* Scrollbar styling (optional) */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.4);
-  }
-</style>
+<!-- Custom CSS -->
+<link rel="stylesheet" href="css/dashboard.css">
 
 </head>
+
+
 <body>
-<!-- Sticky Header with Logo -->
-<nav class="navbar navbar-light bg-light fixed-top shadow-sm px-3 d-flex justify-content-between align-items-center">
-  <div class="logo">
-    <img src="/images/VisionWallet.png" alt="VisionWallet Logo" height="60" class="rounded-logo">
-  </div>
-
-  <button class="btn btn-danger" onclick="logout()">Logout</button>
-</nav>
-
-
-
-<div class="container mt-5">
-    <h2>Welcome, <span id="userName">User</span>!</h2>
-
-    <!-- 🔹 Banking Summary -->
-    <div class="row my-4">
-        <div class="col-md-4">
-            <div class="card text-bg-success">
-                <div class="card-body">
-                    <h5>Total Balance</h5>
-                    <p id="balance">₹...</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-bg-primary">
-                <div class="card-body">
-                    <h5>Total Income</h5>
-                    <p id="income">₹...</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-bg-danger">
-                <div class="card-body">
-                    <h5>Total Expenses</h5>
-                    <p id="expense">₹...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🔘 Navigation Buttons -->
-    <div class="mb-4">
-        <button class="btn btn-outline-dark me-2" onclick="showSection('addTx')">➕ Add Transaction</button>
-        <button class="btn btn-outline-dark me-2" onclick="showSection('txTable')">📜 View Transactions</button>
-        <button class="btn btn-outline-dark me-2" onclick="showSection('reminder')">🔔 Reminders</button>
-        <button class="btn btn-outline-dark me-2" onclick="showSection('budget')">📆 Budget</button>
-        <button class="btn btn-outline-dark me-2" onclick="showSection('savings')">🎯 Savings Goals</button>
-
-    </div>
-
-    <!-- 📥 Transaction Form -->
-	<div id="addTx" class="section">
-	    <h4>Add Transaction</h4>
-	    <form id="expenseForm">
-	        <div class="row">
-	            <div class="col-md-3 mb-2">
-	                <label>Category</label>
-	                <input type="text" class="form-control" id="category" required>
-	            </div>
-	            <div class="col-md-3 mb-2">
-	                <label>Description</label>
-	                <input type="text" class="form-control" id="description" required>
-	            </div>
-	            <div class="col-md-2 mb-2">
-	                <label>Amount (₹)</label>
-	                <input type="number" min="0.1" class="form-control" id="amount" required step="0.01">
-	            </div>
-	            <div class="col-md-2 mb-2">
-	                <label>Date</label>
-	                <input type="date" class="form-control" id="date" required>
-	            </div>
-	            <div class="col-md-2 mb-2">
-	                <label>Type</label>
-	                <select class="form-control" id="type" required>
-	                    <option value="INCOME">Income</option>
-	                    <option value="EXPENSE">Expense</option>
-	                </select>
-	            </div>
-	        </div>
-	        <button type="submit" class="btn btn-success mt-2">Save Transaction</button>
-	    </form>
-	</div>
-
-
-
-    <!-- 📜 Transactions Table -->
-    <div id="txTable" class="section">
-
-    	<!-- 📅 Filter Transactions -->
-	<div class="row mb-3">
-	    <div class="col-md-3">
-	        <label>Start Date</label>
-	        <input type="date" class="form-control" id="txStartDate">
-	    </div>
-	    <div class="col-md-3">
-	        <label>End Date</label>
-	        <input type="date" class="form-control" id="txEndDate">
-	    </div>
-	    <div class="col-md-3 d-flex align-items-end">
-	        <button class="btn btn-primary me-2" onclick="filterTransactions()">🔍 Filter</button>
-	        <button class="btn btn-secondary" onclick="resetTransactionFilter()">🔁 Reset</button>
-	    </div>
-	</div>
-
-        <h4>Transaction History</h4>
-        <table class="table">
-
-<thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th></tr></thead>
-            <tbody id="transactionTable"></tbody>
-        </table>
-    </div>
-
-    <!-- 🔔 Reminders -->
-	<div id="reminder" class="section">
-	    <h4>🔔 Add Bill Reminder</h4>
-	    <form id="reminderForm">
-    <div class="row">
-        <div class="col-md-4 mb-2">
-            <label>Title</label>
-            <input type="text" class="form-control" id="reminderTitle" required>
-        </div>
-        <div class="col-md-4 mb-2">
-            <label>Note</label>
-            <input type="text" class="form-control" id="reminderNote">
-        </div>
-        <div class="col-md-4 mb-2">
-            <label>Due Date</label>
-            <input type="date" class="form-control" id="reminderDate" required>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4 mb-2">
-            <label>Amount</label>
-            <input type="number" min="0.1" class="form-control" id="reminderAmount" required step="0.01">
-        </div>
-        <div class="col-md-4 mb-2">
-            <div class="form-check mt-4">
-                <input class="form-check-input" type="checkbox" id="reminderRecurring">
-                <label class="form-check-label">Repeat Monthly</label>
-            </div>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-warning" id="reminderSubmitBtn">Add Reminder</button>
-</form>
-	    <hr class="my-4">
-	    <h5>📅 Upcoming Reminders (Next 7 Days)</h5>
-	    <table class="table table-striped">
-	        <thead>
-	        <tr>
-	            <th>Title</th>
-	            <th>Note</th>
-	            <th>Due Date</th>
-	            <th>Recurring</th>
-	            <th>Amount</th>
-    				<th>Actions</th>
-	        </tr>
-	        </thead>
-	        <tbody id="reminderTable">
-	        <!-- populated dynamically -->
-	        </tbody>
-	    </table>
-	</div>
-
-
-    <!-- 💰 Budget -->
-	<div id="budget" class="section">
-	    <h4>💰 Monthly Budget Planner</h4>
-
-	    <form id="budgetForm">
-	        <div class="row">
-	            <div class="col-md-3 mb-2">
-	                <label>Category</label>
-	                <input type="text" class="form-control" id="budgetCategory" required>
-	            </div>
-	            <div class="col-md-3 mb-2">
-	                <label>Limit Amount</label>
-	                <input type="number" min="0" class="form-control" id="budgetAmount" required step="0.01">
-	            </div>
-	            <div class="col-md-3 mb-2">
-	                <label>Month</label>
-	                <select id="budgetMonth" class="form-control" required>
-	                    <option value="">Select</option>
-				        <option value="1">January</option>
-				        <option value="2">February</option>
-				        <option value="3">March</option>
-				        <option value="4">April</option>
-				        <option value="5">May</option>
-				        <option value="6">June</option>
-				        <option value="7">July</option>
-				        <option value="8">August</option>
-				        <option value="9">September</option>
-				        <option value="10">October</option>
-				        <option value="11">November</option>
-				        <option value="12">December</option>
-	                </select>
-	            </div>
-	            <div class="col-md-3 mb-2">
-	                <label>Year</label>
-	                <input type="number" min="0" class="form-control" id="budgetYear" required value="2025">
-	            </div>
-	        </div>
-	        <button type="submit" class="btn btn-primary">➕ Add Budget</button>
-	    </form>
-
-	    <hr class="my-4">
-	    <h5>📊 Your Budget Summary</h5>
-	    <!-- 💰 Filter Budgets -->
-		<div class="row mb-3">
-		  <div class="col-md-3">
-		    <label>Month</label>
-		    <select id="budgetFilterMonth" class="form-control">
-		      <option value="">All</option>
-		      <option value="1">January</option>
-		      <option value="2">February</option>
-		      <option value="3">March</option>
-		      <option value="4">April</option>
-		      <option value="5">May</option>
-		      <option value="6">June</option>
-		      <option value="7">July</option>
-		      <option value="8">August</option>
-		      <option value="9">September</option>
-		      <option value="10">October</option>
-		      <option value="11">November</option>
-		      <option value="12">December</option>
-		    </select>
-		  </div>
-		  <div class="col-md-3">
-		    <label>Year</label>
-		    <input type="number" min="0" id="budgetFilterYear" class="form-control" placeholder="e.g. 2025">
-		  </div>
-		  <div class="col-md-3 d-flex align-items-end">
-		    <button class="btn btn-primary me-2" onclick="applyBudgetFilter()">🔍 Filter</button>
-		    <button class="btn btn-secondary" onclick="resetBudgetFilter()">🔁 Reset</button>
-		  </div>
+	<!-- Sticky Header with Logo -->
+	<nav
+		class="navbar glass-navbar px-4 py-2 d-flex justify-content-between align-items-center fixed-top">
+		<!-- Logo -->
+		<div class="d-flex align-items-center">
+			<img src="/images/Logo.png" alt="VisionWallet Logo"
+				class="rounded-logo me-3" />
+			<div class="brand-text">
+				<span class="brand-name">VisionWallet</span><br> <small
+					class="brand-moto">Your Money, Your Vision</small>
+			</div>
 		</div>
 
-	    <table class="table table-bordered">
-	        <thead>
-	        <tr>
-	            <th>Category</th>
-	            <th>Amount</th>
-	            <th>Month</th>
-	            <th>Year</th>
-	            <th>Actions</th>
-	        </tr>
-	        </thead>
-	        <tbody id="budgetTable">
-	        <!-- Filled by JS -->
-	        </tbody>
-	    </table>
-	</div>
-	<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
-	  <div id="budgetToast" class="toast text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-	    <div class="d-flex">
-	      <div class="toast-body">Budget action successful</div>
-	      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-	    </div>
-	  </div>
-	</div>
+
+		<!-- Navigation Buttons -->
+		<div class="d-flex align-items-center gap-3 navbar-links">
+			<button class="nav-btn" onclick="showSection('addTx')">
+				<i class="fa-solid fa-plus"></i> Add
+			</button>
+			<button class="nav-btn" onclick="showSection('txTable')">
+				<i class="fa-solid fa-scroll"></i> Transactions
+			</button>
+			<button class="nav-btn" onclick="showSection('reminder')">
+				<i class="fa-solid fa-bell"></i> Reminders
+			</button>
+			<button class="nav-btn" onclick="showSection('budget')">
+				<i class="fa-solid fa-sack-dollar"></i> Budget
+			</button>
+			<button class="nav-btn" onclick="showSection('savings')">
+				<i class="fa-solid fa-bullseye"></i> Goals
+			</button>
+			<button class="nav-btn logout" onclick="logout()">
+				<i class="fa-solid fa-sign-out-alt"></i> <span class="logout-text">
+					Logout</span>
+			</button>
+		</div>
 
 
-	<!-- 🎯 Savings Goals -->
-	<div id="savings" class="section">
-	    <h4>🎯 Add New Savings Goal</h4>
-	    <form id="savingsForm">
-	        <div class="row">
-	            <div class="col-md-4 mb-2">
-	                <label>Goal Name</label>
-	                <input type="text" class="form-control" id="goalName" required>
-	            </div>
-				<div class="col-md-4 mb-2">
-				    <label>Description</label>
-				    <input type="text" class="form-control" id="goalDescription" required>
+	</nav>
+
+
+
+
+
+
+
+	<div class="container mt-5">
+		<h2>
+			Welcome, <span id="userName">User</span>!
+		</h2>
+
+		<!-- 🔹 Banking Summary -->
+		<div class="cards-container">
+			<div class="card balance-card">
+				<div class="card-header">
+					<div class="icon">₹</div>
+					<div class="card-title">Total Balance</div>
 				</div>
-	            <div class="col-md-4 mb-2">
-	                <label>Target Amount</label>
-	                <input type="number" min="0.1" class="form-control" id="targetAmount" required step="0.01">
-	            </div>
-	        </div>
-	        <button type="submit" class="btn btn-success">➕ Add Goal</button>
-	    </form>
+				<div class="card-amount">
+					<span id="balance" class="rupee-symbol">₹...</span>
+				</div>
+			</div>
 
-	    <hr class="my-4">
-	    <h5>📊 Your Savings Goals</h5>
-	    <table class="table table-bordered">
-	        <thead>
-	        <tr>
-	            <th>Goal</th>
-	            <th>Description</th>
-	            <th>Target</th>
-	            <th>Saved</th>
-	            <th>Status</th>
-	            <th>Actions</th>
-	        </tr>
-	        </thead>
-	        <tbody id="savingsTable">
-	        <!-- Filled dynamically -->
-	        </tbody>
-	    </table>
-	</div>
+			<div class="card income-card">
+				<div class="card-header">
+					<div class="icon">
+						<i class="fa-solid fa-arrow-trend-up"></i>
+					</div>
+					<div class="card-title">Total Income</div>
+				</div>
+				<div class="card-amount">
+					<span id="income" class="rupee-symbol">₹</span>
+				</div>
+			</div>
+
+			<div class="card expense-card">
+				<div class="card-header">
+					<div class="icon">
+						<i class="fa-solid fa-arrow-trend-down"></i>
+					</div>
+					<div class="card-title">Total Expenses</div>
+				</div>
+				<div class="card-amount">
+					<span id="expense" class="rupee-symbol">₹</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- 📥 Transaction Form -->
+		<div id="addTx" class="section">
+			<h4>
+				<i class="fa-solid fa-plus"></i> Add Transaction
+			</h4>
+			<form id="expenseForm">
+				<div class="row">
+					<div class="col-md-3 mb-2">
+						<label>Category</label> <input type="text" class="form-control"
+							id="category" required>
+					</div>
+					<div class="col-md-3 mb-2">
+						<label>Description</label> <input type="text" class="form-control"
+							id="description" required>
+					</div>
+					<div class="col-md-2 mb-2">
+						<label>Amount (₹)</label> <input type="number" min="0.1"
+							class="form-control" id="amount" required step="0.01">
+					</div>
+					<div class="col-md-2 mb-2">
+						<label>Date</label> <input type="date" class="form-control"
+							id="date" required>
+					</div>
+					<div class="col-md-2 mb-2">
+						<label>Type</label> <select class="form-control" id="type"
+							required>
+							<option value="INCOME">Income</option>
+							<option value="EXPENSE">Expense</option>
+						</select>
+					</div>
+				</div>
+				<button type="submit" class="btn-gradient btn-primary mt-2">
+					<i class="fa-solid fa-bookmark"></i> Save Transaction
+				</button>
+			</form>
+		</div>
+
+
+
+		<!-- 📜 Transactions Table -->
+		<div id="txTable" class="section">
+
+			<!-- 📅 Filter Transactions -->
+			<div class="row mb-3">
+				<div class="col-md-3">
+					<label>Start Date</label> <input type="date" class="form-control"
+						id="txStartDate">
+				</div>
+				<div class="col-md-3">
+					<label>End Date</label> <input type="date" class="form-control"
+						id="txEndDate">
+				</div>
+				<div class="col-md-3 d-flex align-items-end">
+					<button class="btn-gradient btn-primary me-2"
+						onclick="filterTransactions()">
+						<i class="fa-solid fa-filter"></i> Filter
+					</button>
+					<button class="btn-gradient btn-secondary me-2"
+						onclick="resetTransactionFilter()">
+						<i class="fa-solid fa-rotate-right"></i> Reset
+					</button>
+				</div>
+				<div class="col-md-3 d-flex justify-content-end align-items-end">
+					<div class="dropdown">
+						<button class="btn-gradient btn-info dropdown-toggle"
+							type="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="fa-solid fa-download"></i> Download
+						</button>
+						<ul class="dropdown-menu dropdown-menu-end custom-dropdown"
+							aria-labelledby="downloadBtn">
+							<li><a class="dropdown-item" href="#"
+								onclick="downloadAsPDF()"><i class="fa-solid fa-file"></i>
+									PDF</a></li>
+							<li><a class="dropdown-item" href="#"
+								onclick="downloadAsExcel()"><i
+									class="fa-solid fa-file-excel"></i> Excel</a></li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+
+			<h4>
+				<i class="fa-solid fa-scroll"></i> Transaction History
+			</h4>
+			<table class="table">
+
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Category</th>
+						<th>Description</th>
+						<th>Amount</th>
+					</tr>
+				</thead>
+				<tbody id="transactionTable"></tbody>
+			</table>
+		</div>
+
+		<!-- 🔔 Reminders -->
+		<div id="reminder" class="section">
+			<h4>
+				<i class="fa-solid fa-bell"></i> Add Bill Reminder
+			</h4>
+			<form id="reminderForm">
+				<div class="row">
+					<div class="col-md-4 mb-2">
+						<label>Title</label> <input type="text" class="form-control"
+							id="reminderTitle" required>
+					</div>
+					<div class="col-md-4 mb-2">
+						<label>Note</label> <input type="text" class="form-control"
+							id="reminderNote">
+					</div>
+					<div class="col-md-4 mb-2">
+						<label>Due Date</label> <input type="date" class="form-control"
+							id="reminderDate" required>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4 mb-2">
+						<label>Amount</label> <input type="number" min="0.1"
+							class="form-control" id="reminderAmount" required step="0.01">
+					</div>
+					<div class="col-md-4 mb-2">
+						<div class="form-check mt-4">
+							<input class="form-check-input" type="checkbox"
+								id="reminderRecurring"> <label class="form-check-label">Repeat
+								Monthly</label>
+						</div>
+					</div>
+				</div>
+				<button type="submit" class="btn-gradient btn-primary"
+					id="reminderSubmitBtn">
+					<i class="fa-solid fa-square-plus"></i> Add Reminder
+				</button>
+			</form>
+			<hr class="my-4">
+			<h5>
+				<i class="fa-solid fa-calendar-days"></i> Upcoming Reminders (Next 7
+				Days)
+			</h5>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Note</th>
+						<th>Due Date</th>
+						<th>Recurring</th>
+						<th>Amount</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody id="reminderTable">
+					<!-- populated dynamically -->
+				</tbody>
+			</table>
+		</div>
+
+
+		<!-- 💰 Budget -->
+		<div id="budget" class="section">
+			<h4>
+				<i class="fa-solid fa-sack-dollar"></i> Monthly Budget Planner
+			</h4>
+
+			<form id="budgetForm">
+				<div class="row">
+					<div class="col-md-3 mb-2">
+						<label>Category</label> <input type="text" class="form-control"
+							id="budgetCategory" required>
+					</div>
+					<div class="col-md-3 mb-2">
+						<label>Limit Amount</label> <input type="number" min="0"
+							class="form-control" id="budgetAmount" required step="0.01">
+					</div>
+					<div class="col-md-3 mb-2">
+						<label>Month</label> <select id="budgetMonth" class="form-control"
+							required>
+							<option value="">Select</option>
+							<option value="1">January</option>
+							<option value="2">February</option>
+							<option value="3">March</option>
+							<option value="4">April</option>
+							<option value="5">May</option>
+							<option value="6">June</option>
+							<option value="7">July</option>
+							<option value="8">August</option>
+							<option value="9">September</option>
+							<option value="10">October</option>
+							<option value="11">November</option>
+							<option value="12">December</option>
+						</select>
+					</div>
+					<div class="col-md-3 mb-2">
+						<label>Year</label> <input type="number" min="0"
+							class="form-control" id="budgetYear" required value="2025">
+					</div>
+				</div>
+				<button type="submit" class="btn-gradient btn-primary">
+					<i class="fa-solid fa-square-plus"></i> Add Budget
+				</button>
+			</form>
+
+			<hr class="my-4">
+			<h5>
+				<i class="fa-solid fa-chart-pie"></i> Your Budget Summary
+			</h5>
+			<!-- 💰 Filter Budgets -->
+			<div class="row mb-3">
+				<div class="col-md-3">
+					<label>Month</label> <select id="budgetFilterMonth"
+						class="form-control">
+						<option value="">All</option>
+						<option value="1">January</option>
+						<option value="2">February</option>
+						<option value="3">March</option>
+						<option value="4">April</option>
+						<option value="5">May</option>
+						<option value="6">June</option>
+						<option value="7">July</option>
+						<option value="8">August</option>
+						<option value="9">September</option>
+						<option value="10">October</option>
+						<option value="11">November</option>
+						<option value="12">December</option>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<label>Year</label> <input type="number" min="0"
+						id="budgetFilterYear" class="form-control" placeholder="e.g. 2025">
+				</div>
+				<div class="col-md-3 d-flex align-items-end">
+					<button class="btn-gradient btn-primary me-2"
+						onclick="applyBudgetFilter()">
+						<i class="fa-solid fa-filter"></i> Filter
+					</button>
+					<button class="btn-gradient btn-secondary"
+						onclick="resetBudgetFilter()">
+						<i class="fa-solid fa-rotate-right"></i> Reset
+					</button>
+				</div>
+			</div>
+
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Category</th>
+						<th>Amount</th>
+						<th>Month</th>
+						<th>Year</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody id="budgetTable">
+					<!-- Filled by JS -->
+				</tbody>
+			</table>
+		</div>
+		<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+			<div id="budgetToast" class="toast text-bg-success border-0"
+				role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="d-flex">
+					<div class="toast-body">Budget action successful</div>
+					<button type="button" class="btn-close btn-close-white me-2 m-auto"
+						data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- 🎯 Savings Goals -->
+		<div id="savings" class="section">
+			<h4>
+				<i class="fa-solid fa-bullseye"></i> Add New Savings Goal
+			</h4>
+			<form id="savingsForm">
+				<div class="row">
+					<div class="col-md-4 mb-2">
+						<label>Goal Name</label> <input type="text" class="form-control"
+							id="goalName" required>
+					</div>
+					<div class="col-md-4 mb-2">
+						<label>Description</label> <input type="text" class="form-control"
+							id="goalDescription" required>
+					</div>
+					<div class="col-md-4 mb-2">
+						<label>Target Amount</label> <input type="number" min="0.1"
+							class="form-control" id="targetAmount" required step="0.01">
+					</div>
+				</div>
+				<button type="submit" class="btn-gradient btn-primary">
+					<i class="fa-solid fa-square-plus"></i> Add Goal
+				</button>
+			</form>
+
+			<hr class="my-4">
+			<h5>
+				<i class="fa-solid fa-chart-line"></i> Your Savings Goals
+			</h5>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Goal</th>
+						<th>Description</th>
+						<th>Target</th>
+						<th>Saved</th>
+						<th>Status</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody id="savingsTable">
+					<!-- Filled dynamically -->
+				</tbody>
+			</table>
+		</div>
 		<!-- ✅ Goal Add Toast Message -->
-	<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
-	  <div id="goalAddToast" class="toast text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-	    <div class="d-flex">
-	      <div class="toast-body">Goal added successfully!</div>
-	      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-	    </div>
-	  </div>
+		<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+			<div id="goalAddToast" class="toast text-bg-success border-0"
+				role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="d-flex">
+					<div class="toast-body">Goal added successfully!</div>
+					<button type="button" class="btn-close btn-close-white me-2 m-auto"
+						data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
+
+		<!-- ✅ Withdrawal Toast Message -->
+		<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+			<div id="goalToast" class="toast text-bg-danger border-0"
+				role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="d-flex">
+					<div class="toast-body">Withdrawn successfully!</div>
+					<button type="button" class="btn-close btn-close-white me-2 m-auto"
+						data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
+
+		<!-- ✅ Transaction Toast Message -->
+		<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+			<div id="txToast"
+				class="toast align-items-center text-bg-success border-0"
+				role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="d-flex">
+					<div class="toast-body">
+						<i class="fa-solid fa-square-check"></i> Transaction added
+						successfully!
+					</div>
+					<button type="button" class="btn-close btn-close-white me-2 m-auto"
+						data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
+
 	</div>
+	<div id="toastContainer" class="position-fixed top-0 end-0 p-3"
+		style="z-index: 1100;"></div>
 
-	<!-- ✅ Withdrawal Toast Message -->
-	<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
-	  <div id="goalToast" class="toast text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-	    <div class="d-flex">
-	      <div class="toast-body">Withdrawn successfully!</div>
-	      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-	    </div>
-	  </div>
-	</div>
+	<!-- Bootstrap Bundle with Popper -->
 
-	<!-- ✅ Transaction Toast Message -->
-	<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
-	  <div id="txToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-	    <div class="d-flex">
-	      <div class="toast-body">
-	        ✅ Transaction added successfully!
-	      </div>
-	      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-	    </div>
-	  </div>
-	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-</div>
-<div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1100;"></div>
+	<!-- SweetAlert2 -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- JS Section -->
-<script>
-    const token = localStorage.getItem("jwt");
+	<!-- Lottie Player -->
+	<script
+		src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+		type="module"></script>
 
-    // Load banking summary
-    async function loadSummary() {
-        const res = await fetch("/api/banking/summary", {
-            headers: { Authorization: "Bearer " + token }
-        });
-        const data = await res.json();
-        document.getElementById("userName").innerText = data.user;
-        document.getElementById("balance").innerText = "₹ " + data.totalBalance.toLocaleString("en-IN", { minimumFractionDigits: 2 });
+	<!-- Custom JS -->
+	<script src="/js/dashboard.js"></script>
 
-        document.getElementById("income").innerText = "₹ " + data.totalIncome.toLocaleString("en-IN", { minimumFractionDigits: 2 });
-        document.getElementById("expense").innerText = "₹ " + data.totalExpense.toLocaleString("en-IN", { minimumFractionDigits: 2 });
+	<!-- jsPDF and autoTable plugin -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
 
-    }
+	<!-- SheetJS (xlsx) -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-    // Show selected section only
-    function showSection(id) {
-        document.querySelectorAll(".section").forEach(sec => sec.style.display = "none");
-        document.getElementById(id).style.display = "block";
-        if (id === "txTable") loadTransactions();
-        if (id === "reminder") loadReminders();
-        if (id === "budget") loadBudgets();
-        if (id === "savings") loadSavingsGoals();
-        // You can trigger budget/savings load here if needed
-    }
-
-    // Transaction table loader (reuse your loadTransactions function)
-	async function loadTransactions() {
-	    const token = localStorage.getItem("jwt");
-	    const res = await fetch("/api/expenses/my", {
-	        headers: { Authorization: "Bearer " + token }
-	    });
-
-	    const data = await res.json();
-	    const table = document.getElementById("transactionTable");
-	    table.innerHTML = "";
-
-	    data.sort((a, b) => new Date(b.date) - new Date(a.date)); // Most recent first
-
-	    data.forEach(tx => {
-	        const isExpense = tx.type === "EXPENSE";
-	        const sign = isExpense ? "-" : "+";
-	        const colorClass = isExpense ? "text-danger" : "text-success";
-	        const formattedAmount = tx.amount.toLocaleString("en-IN", {
-	            minimumFractionDigits: 2,
-	            maximumFractionDigits: 2
-	        });
-
-	        const row = `<tr>
-	            <td>${tx.date}</td>
-	            <td>${tx.category}</td>
-	            <td>${tx.description}</td>
-	            <td class="${colorClass} fw-bold">${sign} ₹${formattedAmount}</td>
-	        </tr>`;
-	        table.innerHTML += row;
-	    });
-
-
-	}
-
-	async function filterTransactions() {
-	    const token = localStorage.getItem("jwt");
-	    const start = document.getElementById("txStartDate").value;
-	    const end = document.getElementById("txEndDate").value;
-
-	    if (!start || !end) {
-	    	  Swal.fire({
-	    	    icon: 'warning',
-	    	    title: 'Missing Dates',
-	    	    text: 'Please select both start and end dates.',
-	    	    confirmButtonColor: '#ffc107'
-	    	  });
-	    	  return;
-	    	}
-
-
-	    const res = await fetch(`/api/expenses/filter?start=${start}&end=${end}`, {
-	        headers: { Authorization: "Bearer " + token }
-	    });
-
-	    const data = await res.json();
-	    const table = document.getElementById("transactionTable");
-	    table.innerHTML = "";
-
-	    data.sort((a, b) => new Date(b.date) - new Date(a.date)); // Optional but recommended
-
-	    data.forEach(tx => {
-	        const isExpense = tx.type === "EXPENSE";
-	        const sign = isExpense ? "-" : "+";
-	        const colorClass = isExpense ? "text-danger" : "text-success";
-	        const formattedAmount = tx.amount.toLocaleString("en-IN", {
-	            minimumFractionDigits: 2,
-	            maximumFractionDigits: 2
-	        });
-
-	        const row = `<tr>
-	            <td>${tx.date}</td>
-	            <td>${tx.category}</td>
-	            <td>${tx.description}</td>
-	            <td class="${colorClass} fw-bold">${sign} ₹${formattedAmount}</td>
-	        </tr>`;
-	        table.innerHTML += row;
-	    });
-
-	}
-
-	async function resetTransactionFilter() {
-	    document.getElementById("txStartDate").value = "";
-	    document.getElementById("txEndDate").value = "";
-	    loadTransactions();
-	}
-
-
-
-
-//Add Transactions
-document.getElementById("expenseForm").addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    const amount = parseFloat(document.getElementById("amount").value);
-    if (isNaN(amount) || amount < 0) {
-        alert("Amount cannot be negative.");
-        return;
-    }
-
-    const token = localStorage.getItem("jwt");
-    const transaction = {
-        category: document.getElementById("category").value,
-        description: document.getElementById("description").value,
-        amount: amount,
-        date: document.getElementById("date").value,
-        type: document.getElementById("type").value
-    };
-
-    const response = await fetch("/api/expenses/add", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        body: JSON.stringify(transaction)
-    });
-
-    const result = await response.text();
-
-    if (response.ok) {
-        // ✅ Show success toast
-        const toastElement = document.getElementById('txToast');
-        const toast = new bootstrap.Toast(toastElement);
-        toast.show();
-
-        loadSummary();     // refresh balance/income/expense
-        loadTransactions(); // refresh history
-        document.getElementById("expenseForm").reset();
-    }else {
-    	  Swal.fire({
-    		    icon: 'error',
-    		    title: 'Transaction Failed',
-    		    text: result || 'Something went wrong!',
-    		    confirmButtonColor: '#dc3545'
-    		  });
-    		}
-
-});
-
-
-
- // Handle reminder form submit
-	document.getElementById("reminderForm").addEventListener("submit", async function (event) {
-	    event.preventDefault();
-
-	    const amount = parseFloat(document.getElementById("reminderAmount").value);
-	    if (isNaN(amount) || amount < 0) {
-	        alert("Amount cannot be negative.");
-	        return;
-	    }
-
-	    const token = localStorage.getItem("jwt");
-	    const reminder = {
-	        title: document.getElementById("reminderTitle").value,
-	        note: document.getElementById("reminderNote").value,
-	        dueDate: document.getElementById("reminderDate").value,
-	        recurring: document.getElementById("reminderRecurring").checked,
-	        amount: amount
-	    };
-
-	    const url = editingReminderId ? `/api/reminders/${editingReminderId}` : "/api/reminders/add";
-	    const method = editingReminderId ? "PUT" : "POST";
-
-	    const response = await fetch(url, {
-	        method,
-	        headers: {
-	            "Content-Type": "application/json",
-	            "Authorization": "Bearer " + token
-	        },
-	        body: JSON.stringify(reminder)
-	    });
-
-	    const result = await response.text();
-	    Swal.fire({
-	    	  toast: true,
-	    	  position: 'top-end',
-	    	  icon: 'success',
-	    	  title: result,
-	    	  showConfirmButton: false,
-	    	  timer: 2500,
-	    	  timerProgressBar: true
-	    	});
-
-
-	    editingReminderId = null;
-	    document.getElementById("reminderForm").reset();
-	    document.querySelector("#reminderForm button[type='submit']").textContent = "Add Reminder";
-	    document.getElementById("reminderSubmitBtn").textContent = "Add Reminder";
-
-	    //It will Reset Button To its original form
-	    const submitBtn = document.querySelector("#reminderForm button[type='submit']");
-	    submitBtn.textContent = "Add Reminder";
-	    submitBtn.classList.remove("btn-info");
-	    submitBtn.classList.add("btn-warning");
-
-	    loadReminders(); // reload reminder table
-	});
-
-
-
-    // Load upcoming reminders: reminder’s due date today or within the next 7 days
-	async function loadReminders() {
-	    const token = localStorage.getItem("jwt");
-	    const response = await fetch("/api/reminders/upcoming", {
-	        headers: {
-	            "Authorization": "Bearer " + token
-	        }
-	    });
-
-	    const reminders = await response.json();
-	    // Sort reminders by due date ascending (oldest to newest)
-	    reminders.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
-	    const table = document.getElementById("reminderTable");
-	    table.innerHTML = "";
-
-	    const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
-
-	    reminders.forEach(rem => {
-	        const row = document.createElement("tr");
-
-	        // 🔴 Mark as red if overdue
-	        if (rem.dueDate < today) {
-	            row.classList.add("table-danger");
-	        }
-
-	        row.innerHTML = `
-	        	  <td>${rem.title}</td>
-	        	  <td>${rem.note || "-"}</td>
-	        	  <td>${rem.dueDate}</td>
-	        	  <td>${rem.recurring ? "Yes" : "No"}</td>
-	        	  <td>₹${rem.amount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-	        	  <td>
-	        	    <button class="btn btn-sm btn-success" onclick="payReminder(${rem.id})">Pay</button>
-	        	    <button class="btn btn-sm btn-warning" onclick='editReminder(${JSON.stringify(rem)})'>Edit</button>
-	        	    <button class="btn btn-sm btn-danger" onclick="deleteReminder(${rem.id})">Delete</button>
-	        	  </td>
-	        	`;
-
-	        table.appendChild(row);
-	    });
-	}
- //Show Reminder Toast
-	async function showReminderToasts() {
-	  const token = localStorage.getItem("jwt");
-	  const today = new Date().toISOString().split("T")[0];
-
-	  try {
-	    const res = await fetch("/api/reminders/upcoming", {
-	      headers: {
-	        Authorization: "Bearer " + token
-	      }
-	    });
-
-	    const reminders = await res.json();
-	    const container = document.getElementById("toastContainer");
-
-	    reminders.forEach(rem => {
-	      if (rem.dueDate <= today) {
-	        const toastEl = document.createElement("div");
-	        toastEl.className = "toast align-items-center text-bg-danger border-0 mb-2";
-	        toastEl.setAttribute("role", "alert");
-	        toastEl.setAttribute("aria-live", "assertive");
-	        toastEl.setAttribute("aria-atomic", "true");
-	        toastEl.innerHTML = `
-	          <div class="d-flex">
-	            <div class="toast-body">
-	              🔔 <strong>${rem.title}</strong><br>
-	              ${rem.note || "You have a pending reminder due today!"}
-	            </div>
-	            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-	          </div>
-	        `;
-
-	        container.appendChild(toastEl);
-
-	        const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
-	        toast.show();
-	      }
-	    });
-	  } catch (error) {
-	    console.error("Error showing reminders:", error);
-	  }
-	}
-
-
-
-
-	//payReminder()
-	async function payReminder(id) {
-	  const token = localStorage.getItem("jwt");
-
-	  // SweetAlert2 Confirmation
-	  const result = await Swal.fire({
-	    title: "Pay Reminder?",
-	    text: "Are you sure you want to mark this reminder as paid?",
-	    icon: "question",
-	    showCancelButton: true,
-	    confirmButtonText: "Yes, Pay Now 💸",
-	    cancelButtonText: "Cancel"
-	  });
-
-	  if (!result.isConfirmed) return;
-
-	  // Proceed with payment
-	  const res = await fetch(`/api/reminders/pay/${id}`, {
-	    method: "PUT",
-	    headers: { Authorization: "Bearer " + token }
-	  });
-
-	  const message = await res.text();
-
-	  // ✅ Show success toast after payment
-	  Swal.fire({
-	    toast: true,
-	    position: 'top-end',
-	    icon: 'success',
-	    title: message || 'Reminder Paid!',
-	    showConfirmButton: false,
-	    timer: 2500,
-	    timerProgressBar: true
-	  });
-
-	  loadSummary();
-	  loadTransactions();
-	  loadReminders();
-	}
-
-
-
-	async function deleteReminder(id) {
-		  const token = localStorage.getItem("jwt");
-
-		  const result = await Swal.fire({
-		    title: "Are you sure?",
-		    text: "This reminder will be deleted permanently!",
-		    icon: "warning",
-		    showCancelButton: true,
-		    confirmButtonColor: "#d33",
-		    cancelButtonColor: "#3085d6",
-		    confirmButtonText: "Yes, delete it!",
-		    cancelButtonText: "Cancel"
-		  });
-
-		  if (result.isConfirmed) {
-		    const res = await fetch(`/api/reminders/delete/${id}`, {
-		      method: "DELETE",
-		      headers: { Authorization: "Bearer " + token }
-		    });
-
-		    const msg = await res.text();
-
-		    Swal.fire({
-		      icon: "success",
-		      title: "Deleted!",
-		      text: msg,
-		      timer: 2000,
-		      showConfirmButton: false
-		    });
-
-		    loadReminders();
-		  }
-		}
-
-
-	let editingReminderId = null;
-	function editReminder(rem) {
-
-	    document.getElementById("reminderTitle").value = rem.title;
-	    document.getElementById("reminderNote").value = rem.note;
-	    document.getElementById("reminderDate").value = rem.dueDate;
-	    document.getElementById("reminderRecurring").checked = rem.recurring;
-	    document.getElementById("reminderAmount").value = rem.amount;
-	    editingReminderId = rem.id;
-
-	    const submitBtn = document.querySelector("#reminderForm button[type='submit']");
-	    submitBtn.textContent = "🔄 Update Reminder";
-	    submitBtn.classList.remove("btn-warning");
-	    submitBtn.classList.add("btn-info");
-
-	 // Show toast
-	    Swal.fire({
-	      toast: true,
-	      position: 'top-end',
-	      icon: 'info',
-	      title: 'Editing reminder...',
-	      showConfirmButton: false,
-	      timer: 2000,
-	      timerProgressBar: true,
-	      background: '#17a2b8',
-	      color: '#fff'
-	    });
-	}
-
-
-    // 📤 Load budgets for selected month/year
-    function getMonthName(monthNumber) {
-	        const monthNames = [
-	            "January", "February", "March", "April", "May", "June",
-	            "July", "August", "September", "October", "November", "December"
-	        ];
-	        return monthNames[monthNumber - 1] || "Invalid";
-	}
-
-    async function loadBudgets(month = "", year = "") {
-        const token = localStorage.getItem("jwt");
-
-        let url = "/api/budget/my";
-        if (month || year) {
-            url += "?";
-            if (month) url += `month=${month}&`;
-            if (year) url += `year=${year}`;
-        }
-
-        const res = await fetch(url, {
-            headers: { Authorization: "Bearer " + token }
-        });
-
-        const data = await res.json();
-
-        // Sort by year desc, then month desc
-        data.sort((a, b) => {
-            if (b.year !== a.year) return b.year - a.year;
-            return b.month - a.month;
-        });
-
-        const table = document.getElementById("budgetTable");
-        table.innerHTML = "";
-
-        if (data.length === 0) {
-            table.innerHTML = `<tr><td colspan="5">No budgets found</td></tr>`;
-            return;
-        }
-
-        data.forEach(item => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${item.category}</td>
-                <td>₹${item.limitAmount.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</td>
-                <td>${getMonthName(item.month)}</td>
-                <td>${item.year}</td>
-                <td>
-                    <button class="btn btn-sm btn-warning" onclick='editBudget(${JSON.stringify(item)})'>Edit</button>
-                    <button class="btn btn-sm btn-danger" onclick='deleteBudget(${item.id})'>Delete</button>
-                </td>
-            `;
-            table.appendChild(row);
-        });
-    }
-
-    function applyBudgetFilter() {
-        const month = document.getElementById("budgetFilterMonth").value;
-        const year = document.getElementById("budgetFilterYear").value;
-
-        // Pass selected values to loadBudgets
-        loadBudgets(month, year);
-    }
-
-
-	function resetBudgetFilter() {
-	    document.getElementById("budgetFilterMonth").value = "";
-	    document.getElementById("budgetFilterYear").value = "";
-	    loadBudgets(); // load all
-	}
-
-
-	let editingBudgetId = null;
-
-	document.getElementById("budgetForm").addEventListener("submit", async function (event) {
-	  event.preventDefault();
-
-	  const token = localStorage.getItem("jwt");
-	  const category = document.getElementById("budgetCategory").value;
-	  const limitAmount = parseFloat(document.getElementById("budgetAmount").value);
-
-	  if (isNaN(limitAmount) || limitAmount < 0) {
-	    // Optional: SweetAlert for better UX
-	    Swal.fire({
-	      icon: "error",
-	      title: "Invalid Amount",
-	      text: "Budget limit cannot be negative.",
-	    });
-	    return;
-	  }
-
-	  const month = parseInt(document.getElementById("budgetMonth").value);
-	  const year = parseInt(document.getElementById("budgetYear").value);
-	  const payload = { category, limitAmount, month, year };
-
-	  const url = editingBudgetId ? `/api/budget/${editingBudgetId}` : "/api/budget/add";
-	  const method = editingBudgetId ? "PUT" : "POST";
-
-	  const res = await fetch(url, {
-	    method,
-	    headers: {
-	      "Content-Type": "application/json",
-	      "Authorization": "Bearer " + token
-	    },
-	    body: JSON.stringify(payload)
-	  });
-
-	  const msg = await res.text();
-
-	  if (res.ok) {
-	    // Show success toast
-	    const toastElement = document.getElementById("budgetToast");
-	    toastElement.querySelector(".toast-body").textContent =
-	      editingBudgetId ? "Budget updated successfully! ✅" : "Budget added successfully!";
-
-	    const toast = new bootstrap.Toast(toastElement);
-	    toast.show();
-	  } else {
-	    // Show error alert
-	    Swal.fire({
-	      icon: "error",
-	      title: "Error",
-	      text: msg,
-	    });
-	  }
-
-	  editingBudgetId = null;
-	  document.getElementById("budgetForm").reset();
-	  document.querySelector("#budgetForm button[type='submit']").textContent = "➕ Add Budget";
-
-	  loadBudgets();
-	});
-
-
-	// 🧹 Delete budget
-	async function deleteBudget(id) {
-	  const token = localStorage.getItem("jwt");
-
-	  // Show SweetAlert confirmation
-	  const result = await Swal.fire({
-	    title: 'Are you sure?',
-	    text: 'This budget will be permanently deleted.',
-	    icon: 'warning',
-	    showCancelButton: true,
-	    confirmButtonText: 'Yes, delete it!',
-	    cancelButtonText: 'Cancel',
-	    confirmButtonColor: '#d33',
-	    cancelButtonColor: '#3085d6'
-	  });
-
-	  if (!result.isConfirmed) return;
-
-	  // Proceed with delete if confirmed
-	  const res = await fetch(`/api/budget/${id}`, {
-	    method: "DELETE",
-	    headers: { Authorization: "Bearer " + token }
-	  });
-
-	  const msg = await res.text();
-
-	  // Show SweetAlert success after deletion
-	  Swal.fire({
-	    icon: 'success',
-	    title: 'Deleted!',
-	    text: msg,
-	    timer: 2000,
-	    showConfirmButton: false
-	  });
-
-	  loadBudgets(); // Refresh the table
-	}
-
-
-	// ✏️ Edit budget
-	function editBudget(budget) {
-	    document.getElementById("budgetCategory").value = budget.category;
-	    document.getElementById("budgetAmount").value = budget.limitAmount;
-	    document.getElementById("budgetMonth").value = budget.month;
-	    document.getElementById("budgetYear").value = budget.year;
-
-	    editingBudgetId = budget.id;
-	    document.querySelector("#budgetForm button[type='submit']").textContent = "🔄 Update Budget";
-	}
-	function editBudgetFromRow(row) {
-	    document.getElementById("budgetCategory").value = row.dataset.category;
-	    document.getElementById("budgetAmount").value = row.dataset.amount;
-	    document.getElementById("budgetMonth").value = row.dataset.month;
-	    document.getElementById("budgetYear").value = row.dataset.year;
-
-	    editingBudgetId = row.dataset.id;
-
-	    document.querySelector("#budgetForm button[type='submit']").textContent = "🔄 Update Budget";
-	}
-
-
-
-
-	// Submit new goal with validation and toast
-	document.getElementById("savingsForm").addEventListener("submit", async function (event) {
-	    event.preventDefault();
-
-	    const targetAmount = parseFloat(document.getElementById("targetAmount").value);
-	    if (isNaN(targetAmount) || targetAmount < 0) {
-	        Swal.fire({
-	            icon: "warning",
-	            title: "Invalid Amount",
-	            text: "Target amount cannot be negative."
-	        });
-	        return;
-	    }
-
-	    const goal = {
-	        goalName: document.getElementById("goalName").value,
-	        description: document.getElementById("goalDescription").value,
-	        targetAmount: targetAmount
-	    };
-
-	    const token = localStorage.getItem("jwt");
-
-	    const res = await fetch("/api/savings/add", {
-	        method: "POST",
-	        headers: {
-	            "Content-Type": "application/json",
-	            "Authorization": "Bearer " + token
-	        },
-	        body: JSON.stringify(goal)
-	    });
-
-	    const msg = await res.text();
-
-	    if (res.ok) {
-	        document.getElementById("savingsForm").reset();
-	        loadSavingsGoals();
-
-	        // ✅ Show success toast
-	        const toastEl = document.getElementById("goalAddToast");
-	        toastEl.querySelector(".toast-body").textContent = msg;
-	        const toast = new bootstrap.Toast(toastEl);
-	        toast.show();
-	    } else {
-	        Swal.fire({
-	            icon: "error",
-	            title: "Failed",
-	            text: msg
-	        });
-	    }
-	});
-
-
-	//Load goals and render table
-	async function loadSavingsGoals() {
-	    const token = localStorage.getItem("jwt");
-	    const res = await fetch("/api/savings/my", {
-	        headers: { Authorization: "Bearer " + token }
-	    });
-
-	    const goals = await res.json();
-
-	    // 🔽 Sort: Incomplete goals first, then completed and purchased
-	    goals.sort((a, b) => {
-	        const order = { PENDING: 0, COMPLETED: 1, PURCHASED: 2 };
-	        return order[a.status] - order[b.status];
-	    });
-
-	    const table = document.getElementById("savingsTable");
-	    table.innerHTML = "";
-
-	    goals.forEach(goal => {
-	        const targetFormatted = goal.targetAmount.toLocaleString("en-IN", {
-	            minimumFractionDigits: 2, maximumFractionDigits: 2
-	        });
-
-	        const savedFormatted = goal.savedAmount.toLocaleString("en-IN", {
-	            minimumFractionDigits: 2, maximumFractionDigits: 2
-	        });
-
-	        let actions = "";
-
-	        if (goal.status === "COMPLETED") {
-	            actions = `
-	                <button class="btn btn-sm btn-primary" onclick="buyGoal(${goal.id})">🛍 Buy</button>
-	                <button class="btn btn-sm btn-secondary" onclick="withdrawGoal(${goal.id})">💸 Withdraw</button>
-	            `;
-	        } else if (goal.status === "PURCHASED") {
-	            actions = `<span class="text-success">Purchased</span>`;
-	        } else {
-	            actions = `
-	                <button class="btn btn-sm btn-success" onclick="updateProgress(${goal.id})">💰 Add</button>
-	                <button class="btn btn-sm btn-primary ms-1" onclick="withdrawFromGoal(${goal.id})">↩️ Withdraw</button>
-	                <button class="btn btn-sm btn-danger ms-1" onclick="deleteGoal(${goal.id})">🗑️ Delete</button>
-	            `;
-	        }
-
-	        const row = document.createElement("tr");
-	        row.innerHTML = `
-	            <td>${goal.goalName}</td>
-	            <td>${goal.description || "-"}</td>
-	            <td>₹${targetFormatted}</td>
-	            <td>₹${savedFormatted}</td>
-	            <td>${goal.status}</td>
-	            <td>${actions}</td>
-	        `;
-
-	        table.appendChild(row);
-	    });
-	}
-
-
-	// Withdraw Money From Goal (SweetAlert2 only)
-	async function withdrawFromGoal(goalId) {
-	  const { value: amount } = await Swal.fire({
-	    title: "Withdraw Amount",
-	    input: "number",
-	    inputLabel: "Enter amount to withdraw:",
-	    inputPlaceholder: "e.g. 500",
-	    inputAttributes: {
-	      min: 0.1,
-	      step: 0.01
-	    },
-	    showCancelButton: true,
-	    confirmButtonText: "Withdraw",
-	    cancelButtonText: "Cancel",
-	    inputValidator: (value) => {
-	      if (!value || isNaN(value) || parseFloat(value) <= 0) {
-	        return "Please enter a valid positive number.";
-	      }
-	    }
-	  });
-
-	  if (!amount) return; // user cancelled
-
-	  const token = localStorage.getItem("jwt");
-
-	  try {
-	    const res = await fetch(`/api/savings/withdraw/${goalId}?amount=${amount}`, {
-	      method: "PUT",
-	      headers: { Authorization: "Bearer " + token }
-	    });
-
-	    const msg = await res.text();
-
-	    if (!res.ok || msg.toLowerCase().includes("insufficient") || msg.toLowerCase().includes("exceed")) {
-	      // ❌ Handle backend failure message
-	      Swal.fire({
-	        icon: "error",
-	        title: "Withdrawal Failed",
-	        text: msg,
-	        confirmButtonColor: "#d33"
-	      });
-	    } else {
-	      // ✅ Success
-	      Swal.fire({
-	        icon: "success",
-	        title: "Withdrawal Successful",
-	        text: msg,
-	        timer: 2500,
-	        showConfirmButton: false
-	      });
-
-	      loadSavingsGoals();
-	      loadSummary();
-	    }
-	  } catch (error) {
-	    Swal.fire({
-	      icon: "error",
-	      title: "Error",
-	      text: "Something went wrong while processing your request."
-	    });
-	  }
-	}
-
-
-
-
-	// ✅ Update saved amount using SweetAlert2
-	async function updateProgress(goalId) {
-	  const { value: amountInput } = await Swal.fire({
-	    title: "Add to Savings",
-	    input: "number",
-	    inputLabel: "Enter amount to add to your savings goal:",
-	    inputPlaceholder: "e.g. 1000",
-	    inputAttributes: {
-	      min: 0.1,
-	      step: 0.01
-	    },
-	    showCancelButton: true,
-	    confirmButtonText: "Add",
-	    cancelButtonText: "Cancel",
-	    inputValidator: (value) => {
-	      if (!value || isNaN(value) || parseFloat(value) <= 0) {
-	        return "Please enter a valid positive number.";
-	      }
-	    }
-	  });
-
-	  if (amountInput) {
-	    const amountToAdd = parseFloat(amountInput);
-	    const token = localStorage.getItem("jwt");
-
-	    try {
-	      const res = await fetch(`/api/savings/update/${goalId}?amountToAdd=${amountToAdd}`, {
-	        method: "PUT",
-	        headers: {
-	          Authorization: "Bearer " + token
-	        }
-	      });
-
-	      const msg = await res.text();
-
-	      Swal.fire({
-	        icon: "success",
-	        title: "Saved Successfully!",
-	        text: msg,
-	        timer: 2500,
-	        showConfirmButton: false
-	      });
-
-	      loadSummary();
-	      loadSavingsGoals();
-	    } catch (error) {
-	      console.error("Failed to update goal progress", error);
-	      Swal.fire({
-	        icon: "error",
-	        title: "Error",
-	        text: "Something went wrong while updating the savings goal."
-	      });
-	    }
-	  }
-	}
-
-
-	// ❌ Delete The Goal with confirmation using SweetAlert2
-	async function deleteGoal(id) {
-	  const result = await Swal.fire({
-	    title: "Delete Savings Goal?",
-	    text: "Are you sure you want to delete this savings goal? Its saved amount will be added back to your balance.",
-	    icon: "warning",
-	    showCancelButton: true,
-	    confirmButtonColor: "#d33",
-	    cancelButtonColor: "#3085d6",
-	    confirmButtonText: "Yes, delete it!",
-	    cancelButtonText: "Cancel"
-	  });
-
-	  if (result.isConfirmed) {
-	    const token = localStorage.getItem("jwt");
-
-	    const res = await fetch(`/api/savings/delete/${id}`, {
-	      method: "DELETE",
-	      headers: {
-	        Authorization: "Bearer " + token
-	      }
-	    });
-
-	    const msg = await res.text();
-
-	    await Swal.fire({
-	      icon: "success",
-	      title: "Deleted!",
-	      text: msg,
-	      timer: 2500,
-	      showConfirmButton: false
-	    });
-
-	    loadSavingsGoals();
-	    loadSummary(); // 💰 Update balance
-	  }
-	}
-
-
-	// 🛍️ Buy Handler with SweetAlert2 Toast
-	async function buyGoal(goalId) {
-	  const token = localStorage.getItem("jwt");
-
-	  const res = await fetch(`/api/savings/buy/${goalId}`, {
-	    method: "PUT",
-	    headers: { Authorization: "Bearer " + token }
-	  });
-
-	  const msg = await res.text();
-
-	  // ✅ Show SweetAlert2 Toast
-	  Swal.fire({
-	    toast: true,
-	    position: 'top-end',
-	    icon: 'success',
-	    title: msg,
-	    showConfirmButton: false,
-	    timer: 3000,
-	    timerProgressBar: true
-	  });
-
-	  loadSavingsGoals();
-	  loadSummary();
-	  loadTransactions();
-	}
-
-
-	//Withdraw Handler with confirmation and toast
-	async function withdrawGoal(goalId) {
-	  const token = localStorage.getItem("jwt");
-
-	  // Optional: SweetAlert confirmation
-	  const result = await Swal.fire({
-	    title: "Are you sure?",
-	    text: "Withdraw saved amount from this goal?",
-	    icon: "warning",
-	    showCancelButton: true,
-	    confirmButtonColor: "#dc3545",
-	    cancelButtonColor: "#6c757d",
-	    confirmButtonText: "Yes, withdraw"
-	  });
-
-	  if (!result.isConfirmed) return;
-
-	  const res = await fetch(`/api/savings/withdraw/${goalId}`, {
-	    method: "DELETE",
-	    headers: { Authorization: "Bearer " + token }
-	  });
-
-	  const msg = await res.text();
-
-	  // ✅ Show toast
-	  const toastElement = document.getElementById("goalToast");
-	  toastElement.querySelector(".toast-body").textContent = msg;
-	  const toast = new bootstrap.Toast(toastElement);
-	  toast.show();
-
-	  loadSavingsGoals();
-	  loadSummary();
-	}
-
-
-
-
-	function logout() {
-		  Swal.fire({
-		    title: 'Are you sure?',
-		    text: "You will be logged out of VisionWallet.",
-		    icon: 'warning',
-		    showCancelButton: true,
-		    confirmButtonColor: '#d33',
-		    cancelButtonColor: '#3085d6',
-		    confirmButtonText: 'Yes, logout',
-		    cancelButtonText: 'Cancel'
-		  }).then((result) => {
-		    if (result.isConfirmed) {
-		      localStorage.removeItem("jwt");
-		      window.location.href = "/";
-		    }
-		  });
-		}
-
-
-    loadSummary(); // Load summary on page load
-
- // Show "View Transactions" section by default on load
-	document.addEventListener("DOMContentLoaded", function () {
-	  // ✅ Show Transactions section by default
-	  showSection("txTable");
-
-	  // ✅ Check if reminders should be shown
-	  const shouldShowReminders = localStorage.getItem("showReminders");
-	  if (shouldShowReminders === "true") {
-	    localStorage.removeItem("showReminders");
-	    showReminderToasts(); // ✅ show toast reminders once
-	  }
-	});
-
-
-
-</script>
 </body>
 </html>

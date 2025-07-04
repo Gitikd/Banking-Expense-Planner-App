@@ -1,0 +1,616 @@
+@charset "UTF-8";
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	background: linear-gradient(135deg, #FFF2E0 0%, #C0C9EE 40%, #A2AADB 75%, #898AC4
+		100%);
+	background-attachment: fixed;
+	/* ✅ Keeps the gradient fixed while scrolling */
+	background-repeat: no-repeat;
+	background-size: cover;
+	font-family: 'Segoe UI', sans-serif;
+	position: relative;
+	overflow-x: hidden;
+	padding-top: 80px; /* for fixed navbar space */
+}
+
+body::after {
+	content: '';
+	position: fixed; /* ✅ Fix texture overlay too */
+	inset: 0;
+	background-image:
+		url('https://www.transparenttextures.com/patterns/soft-wallpaper.png');
+	opacity: 0.06;
+	pointer-events: none;
+	z-index: -1;
+}
+
+.glass-navbar {
+	background-color: rgba(255, 255, 255, 0.1);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+	box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+	z-index: 1000;
+	width: 100%;
+}
+
+.rounded-logo {
+	height: 58px;
+	object-fit: cover;
+}
+
+.brand-name {
+	font-size: 1.5rem;
+	font-weight: bold;
+	color: #898AC4;
+}
+
+.brand-moto {
+	font-size: 0.8rem;
+	color: #898AC4;
+	font-style: italic;
+	margin-top: -4px;
+	display: block;
+	letter-spacing: 0.5px;
+}
+
+.navbar-links {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	flex-wrap: wrap;
+}
+
+.nav-btn {
+	padding: 12px 20px;
+	font-size: 1rem;
+	font-weight: 600;
+	border-radius: 16px;
+	background: rgba(255, 255, 255, 0.2);
+	color: #898AC4;
+	border: 1px solid rgba(255, 255, 255, 0.25);
+	backdrop-filter: blur(10px);
+	transition: all 0.3s ease;
+}
+
+.nav-btn i {
+	margin-right: 6px;
+}
+
+.nav-btn:hover {
+	background: rgba(255, 255, 255, 0.85);
+	color: #222;
+	border-color: rgba(255, 255, 255, 0.4);
+	transform: scale(1.05);
+}
+
+.nav-btn.logout {
+	background: linear-gradient(135deg, #f88c9d, #f497c1);
+	border: none;
+	color: white;
+	font-weight: 600;
+	padding: 8px 12px;
+	border-radius: 14px;
+	box-shadow: 0 6px 18px rgba(244, 151, 193, 0.25);
+	transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 45px; /* Initial width for icon only */
+}
+
+/* Hide text initially */
+.nav-btn.logout .logout-text {
+	opacity: 0;
+	transform: scaleX(0);
+	transform-origin: left;
+	transition: all 0.3s ease;
+	display: inline-block;
+}
+
+/* On hover, expand button and show text */
+.nav-btn.logout:hover {
+	background: linear-gradient(135deg, #f497c1, #e0618c);
+	transform: scale(1.05);
+	width: 130px; /* Adjust based on your text length */
+	color: black;
+}
+
+.nav-btn.logout:hover .logout-text {
+	opacity: 1;
+	transform: scaleX(1);
+	color: black;
+}
+
+.logout-btn {
+	background: linear-gradient(135deg, #f88c9d, #f497c1);
+	border: none;
+	color: white;
+	font-weight: 600;
+	padding: 8px 12px;
+	border-radius: 14px;
+	box-shadow: 0 6px 18px rgba(244, 151, 193, 0.25);
+	transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+	background: linear-gradient(135deg, #f497c1, #e0618c);
+	transform: scale(1.05);
+}
+
+h2, h4, h5 {
+	font-weight: 700;
+	color: #898AC4;
+}
+
+.cards-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+	margin-top: 2rem;
+	margin-bottom: 3rem;
+	perspective: 1000px;
+	flex-wrap: wrap;
+}
+
+.card {
+	padding: 2.5rem;
+	border-radius: 28px;
+	backdrop-filter: blur(25px) saturate(180%);
+	border: 5px solid transparent;
+	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	position: relative;
+	overflow: hidden;
+	width: 340px;
+	min-height: 200px;
+}
+
+.card:nth-child(1) {
+	box-shadow: 0 25px 50px rgba(34, 197, 94, 0.3), 0 15px 30px
+		rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1),
+		/* Top edge - bright white light */
+                inset 0 8px 15px -5px rgba(255, 255, 255, 0.9),
+		/* Left edge - soft white light */
+                inset 8px 0 15px -5px rgba(255, 255, 255, 0.7),
+		/* Bottom edge - soft green shadow */
+                inset 0 -8px 15px -5px rgba(16, 185, 129, 0.4),
+		/* Right edge - deeper green shadow */
+                inset -8px 0 15px -5px rgba(5, 150, 105, 0.5);
+}
+
+.card:nth-child(2) {
+	box-shadow: 0 35px 60px rgba(59, 130, 246, 0.3), 0 20px 40px
+		rgba(0, 0, 0, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1),
+		/* Top edge - bright white light */
+                inset 0 8px 15px -5px rgba(255, 255, 255, 0.9),
+		/* Left edge - soft white light */
+                inset 8px 0 15px -5px rgba(255, 255, 255, 0.7),
+		/* Bottom edge - soft blue shadow */
+                inset 0 -8px 15px -5px rgba(37, 99, 235, 0.4),
+		/* Right edge - deeper blue shadow */
+                inset -8px 0 15px -5px rgba(29, 78, 216, 0.5);
+}
+
+.card:nth-child(3) {
+	box-shadow: 0 45px 70px rgba(239, 68, 68, 0.3), 0 25px 50px
+		rgba(0, 0, 0, 0.15), 0 12px 24px rgba(0, 0, 0, 0.1),
+		/* Top edge - bright white light */
+                inset 0 8px 15px -5px rgba(255, 255, 255, 0.9),
+		/* Left edge - soft white light */
+                inset 8px 0 15px -5px rgba(255, 255, 255, 0.7),
+		/* Bottom edge - soft red shadow */
+                inset 0 -8px 15px -5px rgba(220, 38, 38, 0.4),
+		/* Right edge - deeper red shadow */
+                inset -8px 0 15px -5px rgba(185, 28, 28, 0.5);
+}
+
+.card::before {
+	content: '';
+	position: absolute;
+	top: -2px;
+	left: -2px;
+	width: 40%;
+	height: 40%;
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%,
+		rgba(255, 255, 255, 0.4) 30%, rgba(255, 255, 255, 0.1) 60%,
+		transparent 100%);
+	border-radius: 28px;
+	filter: blur(1px);
+	z-index: 1;
+	pointer-events: none;
+}
+
+.card::after {
+	content: '';
+	position: absolute;
+	bottom: 8px;
+	right: 8px;
+	width: 35%;
+	height: 35%;
+	background: linear-gradient(225deg, rgba(0, 0, 0, 0.15) 0%,
+		rgba(0, 0, 0, 0.08) 40%, transparent 70%);
+	border-radius: 50%;
+	z-index: 1;
+	pointer-events: none;
+}
+
+.card:hover {
+	transform: translateY(-15px) scale(1.05) rotateX(0deg) rotateY(0deg);
+	box-shadow: 0 50px 80px rgba(0, 0, 0, 0.2), 0 25px 40px
+		rgba(0, 0, 0, 0.15), 0 15px 25px rgba(0, 0, 0, 0.1),
+		/* Inverted bevel on hover - softer */
+                inset 0 -8px 15px -5px rgba(255, 255, 255, 0.5), inset
+		-8px 0 15px -5px rgba(255, 255, 255, 0.3), inset 0 8px 15px -5px
+		rgba(0, 0, 0, 0.2), inset 8px 0 15px -5px rgba(0, 0, 0, 0.2);
+}
+
+.card:nth-child(1):hover {
+	box-shadow: 0 50px 80px rgba(34, 197, 94, 0.4), 0 25px 40px
+		rgba(0, 0, 0, 0.15), 0 15px 25px rgba(0, 0, 0, 0.1),
+		/* Inverted green bevel on hover */
+                inset 0 -5px 0 0 rgba(255, 255, 255, 0.6), inset -5px 0
+		0 0 rgba(255, 255, 255, 0.4), inset 0 5px 0 0 rgba(5, 150, 105, 0.4),
+		inset 5px 0 0 0 rgba(16, 185, 129, 0.4);
+}
+
+.card:nth-child(2):hover {
+	box-shadow: 0 50px 80px rgba(59, 130, 246, 0.4), 0 25px 40px
+		rgba(0, 0, 0, 0.15), 0 15px 25px rgba(0, 0, 0, 0.1),
+		/* Inverted blue bevel on hover */
+                inset 0 -5px 0 0 rgba(255, 255, 255, 0.6), inset -5px 0
+		0 0 rgba(255, 255, 255, 0.4), inset 0 5px 0 0 rgba(29, 78, 216, 0.4),
+		inset 5px 0 0 0 rgba(37, 99, 235, 0.4);
+}
+
+.card:nth-child(3):hover {
+	box-shadow: 0 50px 80px rgba(239, 68, 68, 0.4), 0 25px 40px
+		rgba(0, 0, 0, 0.15), 0 15px 25px rgba(0, 0, 0, 0.1),
+		/* Inverted red bevel on hover */
+                inset 0 -5px 0 0 rgba(255, 255, 255, 0.6), inset -5px 0
+		0 0 rgba(255, 255, 255, 0.4), inset 0 5px 0 0 rgba(185, 28, 28, 0.4),
+		inset 5px 0 0 0 rgba(220, 38, 38, 0.4);
+}
+
+.balance-card {
+	background: linear-gradient(135deg, rgba(236, 253, 245, 0.85) 0%,
+		rgba(209, 250, 229, 0.75) 50%, rgba(187, 247, 208, 0.8) 100%);
+	color: #065f46;
+	border-color: rgba(34, 197, 94, 0.3);
+}
+
+.income-card {
+	background: linear-gradient(135deg, rgba(219, 234, 254, 0.85) 0%,
+		rgba(191, 219, 254, 0.75) 50%, rgba(147, 197, 253, 0.8) 100%);
+	color: #1e3a8a;
+	border-color: rgba(59, 130, 246, 0.3);
+}
+
+.expense-card {
+	background: linear-gradient(135deg, rgba(254, 226, 226, 0.85) 0%,
+		rgba(252, 165, 165, 0.75) 50%, rgba(248, 113, 113, 0.8) 100%);
+	color: #991b1b;
+	border-color: rgba(239, 68, 68, 0.3);
+}
+
+.card-header {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-bottom: 1.5rem;
+	position: relative;
+	z-index: 2;
+}
+
+.icon {
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5rem;
+	font-weight: bold;
+	backdrop-filter: blur(10px);
+	border: 3px solid transparent;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), /* Top-left light */
+                inset 2px 2px 4px rgba(255, 255, 255, 0.8),
+		/* Bottom-right shadow */
+                inset -2px -2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.balance-card .icon {
+	background: rgba(34, 197, 94, 0.25);
+	color: #16a34a;
+	border-color: rgba(34, 197, 94, 0.8);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 2px 2px 4px
+		rgba(255, 255, 255, 0.8), inset -2px -2px 4px rgba(5, 150, 105, 0.3);
+}
+
+.income-card .icon {
+	background: rgba(59, 130, 246, 0.25);
+	color: #2563eb;
+	border-color: rgba(59, 130, 246, 0.8);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 2px 2px 4px
+		rgba(255, 255, 255, 0.8), inset -2px -2px 4px rgba(29, 78, 216, 0.3);
+}
+
+.expense-card .icon {
+	background: rgba(239, 68, 68, 0.25);
+	color: #dc2626;
+	border-color: rgba(239, 68, 68, 0.8);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 2px 2px 4px
+		rgba(255, 255, 255, 0.8), inset -2px -2px 4px rgba(185, 28, 28, 0.3);
+}
+
+.card-title {
+	font-size: 1.3rem;
+	font-weight: 600;
+	opacity: 0.9;
+	position: relative;
+	z-index: 2;
+}
+
+.card-amount {
+	font-size: 2.8rem;
+	font-weight: 700;
+	line-height: 1;
+	margin-top: 0.5rem;
+	position: relative;
+	z-index: 2;
+	text-align: center;
+}
+
+.rupee-symbol {
+	font-size: 2.2rem;
+	margin-right: 0.3rem;
+}
+
+.text-bg-success {
+	background-color: #28a745 !important;
+}
+
+.text-bg-primary {
+	background-color: #007bff !important;
+}
+
+.text-bg-danger {
+	background-color: #dc3545 !important;
+}
+
+.btn {
+	border: none;
+	border-radius: 14px;
+	font-size: 18px;
+	padding: 12px;
+	margin-top: 20px;
+	color: #fff;
+	font-weight: 600;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.btn-outline-dark {
+	background: linear-gradient(135deg, #898AC4, #A2AADB);
+	color: #fff;
+	border: 2px solid white;
+}
+
+/* Base gradient button style */
+.btn-gradient {
+	border: none;
+	color: white;
+	font-weight: 600;
+	padding: 12px 20px;
+	border-radius: 14px;
+	font-size: 16px;
+	transition: all 0.3s ease;
+	box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+	backdrop-filter: blur(8px);
+}
+
+/* Primary - Lavender Indigo */
+.btn-primary {
+	background: linear-gradient(135deg, #A2AADB, #898AC4);
+}
+
+.btn-primary:hover {
+	background: linear-gradient(135deg, #898AC4, #6b6bae);
+	transform: scale(1.05);
+	color: #1e1e2f;
+}
+
+/* Success - Mint Green */
+.btn-success {
+	background: linear-gradient(135deg, #22c97f, #19875c);
+	color: #fff;
+	font-weight: 600;
+	border: none;
+	padding: 12px 20px;
+	border-radius: 14px;
+	font-size: 16px;
+	box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+	transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+	background: linear-gradient(135deg, #42ecb6, #22c97f);
+	transform: scale(1.05);
+	color: #333;
+}
+
+/* Warning - Pastel Gold */
+.btn-warning {
+	background: linear-gradient(135deg, #f1c40f, #d4ac0d);
+	color: #000;
+	font-weight: 600;
+	border: none;
+	padding: 12px 20px;
+	border-radius: 14px;
+	font-size: 16px;
+	box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+	transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+	background: linear-gradient(135deg, #ffe082, #f1c40f);
+	transform: scale(1.05);
+	color: #fff;
+}
+
+/* Danger - Soft Pink */
+.btn-danger {
+	background: linear-gradient(135deg, #e0618c, #c53063);
+	color: #fff;
+	font-weight: 600;
+	border: none;
+	padding: 12px 20px;
+	border-radius: 14px;
+	font-size: 16px;
+	box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+	transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+	background: linear-gradient(135deg, #f497c1, #e0618c);
+	transform: scale(1.05);
+	color: #333;
+}
+
+/* Secondary - Muted Lavender Gray */
+.btn-secondary {
+	background: linear-gradient(135deg, #d8d9e8, #b3b5d2);
+}
+
+.btn-secondary:hover {
+	background: linear-gradient(135deg, #b3b5d2, #989ac0);
+	transform: scale(1.05);
+	color: #1e1e2f;
+}
+
+.btn-info {
+	background: linear-gradient(135deg, #a0d8ef, #5db9d0);
+	border: none;
+	color: white;
+	font-weight: 600;
+	padding: 10px 16px;
+	border-radius: 14px;
+	box-shadow: 0 6px 18px rgba(93, 185, 208, 0.25);
+	transition: all 0.3s ease;
+}
+
+.btn-info:hover {
+	background: linear-gradient(135deg, #5db9d0, #3a9bb4);
+	transform: scale(1.05);
+	box-shadow: 0 8px 24px rgba(61, 162, 188, 0.4);
+	color: #1e1e2f;
+}
+
+/* Custom Glass Dropdown */
+.dropdown-menu {
+	background: rgba(255, 255, 255, 0.12);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 10px;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+	padding: 0.3rem 0;
+	min-width: 130px; /* ⬅️ Adjust width */
+	width: auto;
+	transition: all 0.3s ease-in-out;
+	transform-origin: top center;
+}
+
+.dropdown-menu .dropdown-item {
+	color: black;
+	font-weight: 500;
+	font-size: 14px;
+	padding: 8px 14px;
+	transition: background 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-menu .dropdown-item:hover {
+	background: rgba(255, 255, 255, 0.2);
+	color: #000;
+	border-radius: 6px;
+}
+
+.form-control {
+	border-radius: 12px;
+	padding: 12px 15px;
+	font-size: 15px;
+	border: none;
+}
+
+.table {
+	color: white;
+	background-color: rgba(255, 255, 255, 0.05);
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+.table thead {
+	background-color: rgba(255, 255, 255, 0.15);
+	color: white;
+}
+
+.table tbody tr td {
+	vertical-align: middle;
+}
+
+.section {
+	display: none;
+	padding: 20px;
+	border-radius: 12px;
+	background-color: rgba(255, 255, 255, 0.05);
+	margin-bottom: 40px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+#transactionTable td.amount-income {
+	color: #00ff91;
+	font-weight: bold;
+}
+
+#transactionTable td.amount-expense {
+	color: #ff5757;
+	font-weight: bold;
+}
+
+.form-check-label {
+	color: white;
+}
+
+.form-check-input:checked {
+	background-color: #ffc107;
+	border-color: #ffc107;
+}
+
+/* Scrollbar styling (optional) */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.4);
+}
